@@ -1,6 +1,6 @@
 ## Analytical JS
 
-Open source, transparent, simple and free for all analytics.
+Open source, transparent, simple and free for all website analytics.
 
 ## About the project
 

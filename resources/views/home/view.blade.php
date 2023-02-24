@@ -62,7 +62,7 @@
 
                 <div class="spacer20"></div>
 
-                <a href="https://github.com/SamGuest/AnalyticalJS" class="btn btn-gradient-purple">View on GitHub</a>
+                <a href="https://github.com/AnalyticalJS/AnalyticalJS" class="btn btn-gradient-purple">View on GitHub</a>
 
             </div>
 
