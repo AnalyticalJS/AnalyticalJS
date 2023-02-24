@@ -1,0 +1,21 @@
+.text-right{
+    text-align: right;
+}
+.text-left{
+    text-align: left;
+}
+.text-center{
+    text-align: center;
+    margin: auto;
+}
+.login-page-text{
+    color: #fff;
+    font-weight: 700;
+    padding: 5px;
+}
+.login-page-text.remember-me{
+    padding: 0px;
+}
+.forgot-password:hover{
+    color: #2EDCBA;
+}
