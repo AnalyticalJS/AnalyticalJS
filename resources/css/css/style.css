@@ -275,7 +275,7 @@ a.underlined:hover:after{
 
 .gradientTextReverse{
     -webkit-text-fill-color: transparent;
-    background: linear-gradient(-145deg,#22ddb7,#3fa0f0,#60f);
+    background: linear-gradient(-145deg,#3fa0f0,#60f);
     -webkit-background-clip: text;
     background-repeat: repeat-x;
     background-size: 100% 100%;
