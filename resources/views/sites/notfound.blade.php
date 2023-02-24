@@ -41,6 +41,8 @@
 
                     </div>
 
+                @include("layouts.includes.script")
+
                 <div class="spacer20"></div>
 
                 <a href="/" class="btn btn-gradient-purple-alternative btn100">Go Back</a>

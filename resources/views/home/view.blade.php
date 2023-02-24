@@ -52,7 +52,7 @@
 
             <div class="hero-content">
 
-                <h1 class="logo">Analytical.js</h1>
+                <h1 class="logo"><a href="/">Analytical.js</a></h1>
 
                 <p>Open source, transparent, simple and free for all <span class="underlined">website analytics.</span></p>
 

@@ -29,15 +29,15 @@
 
             <div class="container text-center">
 
-                <h1 class="logo">Analytical.js</h1>
+                <div class="logo"><a href="/">Analytical.js</a></div>
 
-                <div class="glassText domain">
-                    {{ $website->domain }}
-                </div>
+                <h1 class="glassText domain">
+                    Site analytics for domain: <span class="underlined blueText">{{ $website->domain }}</span>
+                </h1>
 
                 <div class="spacer20"></div>
 
-                <div class="row">
+                <div class="row flex-column-reverse flex-lg-row">
 
                     <div class="col-lg-8 mt-3 mb-3">
                 

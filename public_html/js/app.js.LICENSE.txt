@@ -4,6 +4,13 @@
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
   */
 
+/*!
+ * clipboard.js v2.0.11
+ * https://clipboardjs.com/
+ *
+ * Licensed MIT © Zeno Rocha
+ */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
