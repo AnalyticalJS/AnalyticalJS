@@ -29,7 +29,7 @@
 
             <div class="hero-content">
 
-                <h1 class="logo">Analytical.js</h1>
+                <h1 class="logo"><a href="/">Analytical.js</a></h1>
 
                 <div class="glassText domain">
                     {!! $domain !!}
