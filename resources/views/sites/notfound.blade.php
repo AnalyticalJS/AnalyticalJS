@@ -35,11 +35,13 @@
                     {!! $domain !!}
                 </div>
 
-                    <div class="glassText">
+                <div class="glassText">
 
-                        Site Not Found
+                    Site Not Found
 
-                    </div>
+                </div>
+
+                <hr/>
 
                 @include("layouts.includes.script")
 

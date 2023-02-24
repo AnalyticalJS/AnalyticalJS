@@ -206,7 +206,7 @@ a.underlined:hover:after{
 }
 
 .largeNumber{
-    font-size:100px;
+    font-size:92px;
     font-weight:bold;
 }
 
@@ -261,6 +261,24 @@ a.underlined:hover:after{
     animation: slideGradient 40s linear infinite;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    font-weight:bold;
+}
+
+.gradientText{
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(145deg,#22ddb7,#3fa0f0,#60f);
+    -webkit-background-clip: text;
+    background-repeat: repeat-x;
+    background-size: 100% 100%;
+    font-weight:bold;
+}
+
+.gradientTextReverse{
+    -webkit-text-fill-color: transparent;
+    background: linear-gradient(-145deg,#22ddb7,#3fa0f0,#60f);
+    -webkit-background-clip: text;
+    background-repeat: repeat-x;
+    background-size: 100% 100%;
     font-weight:bold;
 }
 
