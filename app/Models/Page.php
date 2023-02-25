@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Referral extends Model
+class Page extends Model
 {
 
     protected $fillable = [
@@ -13,18 +13,8 @@ class Referral extends Model
         'session_id',
         'pages',
         'url',
-        'date',
-        'referral_url'
+        'date'
     ];
 
     use SoftDeletes;
-
-    protected $hidden = [
-        'ip'
-    ];
-
-
-    protected $casts = [
-        'session_ended' => 'datetime',
-    ];
 }

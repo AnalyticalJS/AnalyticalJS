@@ -16,6 +16,3 @@ use Illuminate\Support\Facades\Route;
 
 // Get Init Details
 Route::get('/initDetails/', [App\Http\Controllers\Api\ApiFunctionController::class, 'initDetails'])->name('initDetails');
-
-// Unnmount
-Route::get('/unmount/{id}', [App\Http\Controllers\Api\ApiFunctionController::class, 'unmount'])->name('unmount');

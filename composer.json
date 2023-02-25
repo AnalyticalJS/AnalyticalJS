@@ -11,7 +11,8 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "laravel/ui": "^3.4"
+        "laravel/ui": "^3.4",
+        "stevebauman/location": "^6.6"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
@@ -58,7 +59,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "platform": {
-            "php": "8.1"
+            "php": "8.0"
         }
     },
     "minimum-stability": "dev",

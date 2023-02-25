@@ -4,7 +4,7 @@
                 
     <div class="panelInner mt-3 mb-3  pb-3 pt-3">
 
-        <div class="largeNumber gradientText">{{$realtimeUsers}}</div>
+        <div class="largeNumber gradientText">{{GlobalFunc::count_format2($realtimeUsers)}}</div>
 
         <small>Users active in the last 30 minutes</small>
 
@@ -12,7 +12,7 @@
 
     <div class="panelInner mt-3 mb-3 pb-3 pt-3">
 
-        <div class="largeNumber gradientText">{{$realtimePages}}</div>
+        <div class="largeNumber gradientText">{{GlobalFunc::count_format2($realtimePages)}}</div>
 
         <small>Pages viewed in the last 30 minutes</small>
 
