@@ -18,7 +18,6 @@ class CreateSessionsTable extends Migration
             $table->integer('website_id');
             $table->string('ip');
             $table->integer('pages')->default(1);
-            $table->timestamp('session_ended')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

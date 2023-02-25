@@ -19,7 +19,6 @@ class CreatePagesTable extends Migration
             $table->integer('session_id');
             $table->integer('pages')->default(1);
             $table->string('url')->nullable();
-            $table->timestamp('date')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

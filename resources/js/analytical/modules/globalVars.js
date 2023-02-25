@@ -25,7 +25,7 @@ async function initDetails(){
           'Content-Type': 'application/json'
         },
         method: "POST",
-        body: JSON.stringify({referrer: document.referrer})
+        body: JSON.stringify({referrer: document.referrer, page: document.URL})
     }).then( (response) => response.json() ).then((responseData) => {
         userIP = responseData.userIP;
         referrer = responseData.referrer;

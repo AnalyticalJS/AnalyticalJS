@@ -21,8 +21,7 @@ class Session extends Model
         'ip'
     ];
 
-
-    protected $casts = [
-        'session_ended' => 'datetime',
-    ];
+    public function session_info() {
+        return $this->hasOne('App\Models\Session_information','session_id','id');
+    }
 }

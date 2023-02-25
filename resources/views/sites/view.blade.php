@@ -53,6 +53,32 @@
 
                 </div>
 
+                <div class="row">
+
+                    <div class="col-lg-12 mt-3 mb-3">
+
+                        @include('sites.elements.charts.world')
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-6 mt-3 mb-3">
+
+                        @include('sites.elements.charts.browser')
+
+                    </div>
+
+                    <div class="col-lg-6 mt-3 mb-3">
+
+                        @include('sites.elements.charts.os')
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>

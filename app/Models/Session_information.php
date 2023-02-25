@@ -17,8 +17,20 @@ class Session_information extends Model
         'cityName',
         'latitude',
         'longitude',
-        'timezone'
+        'timezone',
+        'browser_version',
+        'os_family',
+        'os_type',
+        'os_name',
+        'os_version',
+        'os_title',
+        'device_type'
     ];
 
     use SoftDeletes;
+
+    public function session()
+    {
+        return $this->belongsTo('App\Models\Session','id','session_id');
+    }
 }

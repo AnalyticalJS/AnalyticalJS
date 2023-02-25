@@ -144,6 +144,12 @@ a.underlined:hover:after{
     height:4px;
 }
 
+.mapInner{
+    padding:2px;
+    border-radius:10px;
+    background-image: linear-gradient(to right bottom, #eaf6ff, #daebff, #d2e0ff, #bdd9ff, #a9c7ff);
+}
+
 .input{
     background-color:#C6DEFF;
     border:0px;
@@ -203,6 +209,10 @@ a.underlined:hover:after{
 
 .chart{
     max-height: 400px;
+}
+
+.squareChart{
+    max-height:1200px;
 }
 
 .largeNumber{

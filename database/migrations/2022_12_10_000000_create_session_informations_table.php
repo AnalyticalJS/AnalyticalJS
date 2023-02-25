@@ -24,7 +24,13 @@ class CreateSessionInformationsTable extends Migration
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
             $table->string('timezone')->nullable();
-            $table->timestamp('date')->nullable();
+            $table->string('browser_version')->nullable();
+            $table->string('os_family')->nullable();
+            $table->string('os_type')->nullable();
+            $table->string('os_name')->nullable();
+            $table->string('os_version')->nullable();
+            $table->string('os_title')->nullable();
+            $table->string('device_type')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
