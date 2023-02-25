@@ -22,7 +22,8 @@ async function initDetails(){
     fetch(url, {
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content
         },
         method: "POST",
         body: JSON.stringify({referrer: document.referrer, page: document.URL})
