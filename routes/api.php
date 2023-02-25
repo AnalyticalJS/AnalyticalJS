@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Get Init Details
-Route::get('/initDetails/', [App\Http\Controllers\Api\ApiFunctionController::class, 'initDetails'])->name('initDetails');
+Route::post('/initDetails/', [App\Http\Controllers\Api\ApiFunctionController::class, 'initDetails'])->name('initDetails');

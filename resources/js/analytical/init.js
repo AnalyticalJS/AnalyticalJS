@@ -20,4 +20,5 @@ window.onload = function(){
             System.debugMessage("Analytical.js intilised");
             System.debugMessage(System.vars.referrerDomain);
         }
+        
 }

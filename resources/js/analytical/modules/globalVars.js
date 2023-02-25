@@ -19,7 +19,14 @@ async function initDetails(){
     } else {
         var url = process.env.MIX_APP_URL+"/api/initDetails";
     }
-    fetch(url).then( (response) => response.json() ).then((responseData) => {
+    fetch(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify({referrer: document.referrer})
+    }).then( (response) => response.json() ).then((responseData) => {
         userIP = responseData.userIP;
         referrer = responseData.referrer;
         referrerDomain = responseData.referrerDomain;

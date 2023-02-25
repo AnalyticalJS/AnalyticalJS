@@ -9,6 +9,7 @@ use App\Models\Website;
 use App\Models\Session;
 use App\Models\Referral;
 use App\Models\Session_information;
+use Illuminate\Support\Facades\URL;
 use Stevebauman\Location\Facades\Location;
 
 
@@ -21,13 +22,14 @@ class ApiFunctionController
 
     public function initDetails()
     {
+        $data = Request::all();
         $ip = Request::ip();
         $id = 0;
         $referrer = $_SERVER['HTTP_REFERER'];
         $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
         $website = Website::where("domain",$referrerDomain);
-        $page = Request::header('referer');
-        $referral = Request::server('HTTP_REFERER');
+        $page = Request::server('HTTP_REFERER');
+        $referral = $data['referrer'];
 
         if(str_contains($ip, "192.168") && env("APP_ENV") == "Production") {
             $failed = true;
