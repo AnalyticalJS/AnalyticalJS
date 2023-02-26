@@ -48,10 +48,10 @@ class SitesController extends Controller
 
             $locations = $website->first()->sessions->where('created_at', '>', $lastDay);
             foreach($locations as $index => $location){
-                $mapData[$index] = [
+                array_push($mapData, [
                     "feature" => $location->session_info->countryName,
                     "name" => $location->session_info->countryName,
-                ];
+                ]);
             }
             $sessionInfo = Session_information::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get();
             $collection = collect($sessionInfo)->unique("browser");
