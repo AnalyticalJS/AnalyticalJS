@@ -39,11 +39,11 @@ class SitesController extends Controller
                 $hourEnd = Carbon::now()->subHours($i)->endOfHour()->toDateTimeString();
                 $sessions = $website->first()->sessions()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
                 $pages = $website->first()->sessions()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->sum("pages");
-                $days[$i] = [
+                array_push($days, [
                     "hour" => $hourDisplay,
                     "sessions" => $sessions,
                     "pages" => $pages
-                ];
+                ]);
             }
 
             $locations = $website->first()->sessions->where('created_at', '>', $lastDay);
