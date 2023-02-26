@@ -23,6 +23,7 @@
     "dependencies": {
         "chart.js": "^4.0.1",
         "chartjs-chart-geo": "^4.1.2",
+        "chartjs-plugin-zoom": "^2.0.0",
         "clipboard": "^2.0.11"
     }
 }

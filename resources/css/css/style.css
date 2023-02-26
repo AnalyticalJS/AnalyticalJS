@@ -7,6 +7,28 @@ body{
     font-family: 'Inconsolata', monospace;
 }
 
+/* ===== Scrollbar CSS ===== */
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #22ddb7 #f1f1f1;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 15px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #22ddb7;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+  }
+
 .logo{
     font-family: 'Pacifico', cursive;
     font-size:74px;
@@ -300,4 +322,15 @@ a.underlined:hover:after{
     to {
         background-position: 0 0
     }
+}
+
+.feedData{
+    text-align:left;
+    height:200px;
+    overflow-y:auto;
+    margin: 5px;
+}
+
+.odd{
+    background-color:rgba(0,0,0,0.02);
 }
