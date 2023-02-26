@@ -4,10 +4,6 @@
                 
     <div class="panelInner">
 
-        <script>
-            const deviceData = @json($deviceData);
-        </script>
-
         <canvas id="device" class="squareChart"></canvas>
 
     </div>

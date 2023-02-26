@@ -3,7 +3,8 @@ import { Chart } from 'chart.js';
 import { ChoroplethController, BubbleMapController, GeoFeature, ColorScale, ProjectionScale, SizeScale } from 'chartjs-chart-geo';
 Chart.register(ChoroplethController, BubbleMapController, GeoFeature, ColorScale, ProjectionScale, SizeScale);
 
-fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()).then((data) => {
+var mapData = sessionData;
+fetch('/countries.json').then((r) => r.json()).then((data) => {
       const countries = ChartGeo.topojson.feature(data, data.objects.countries).features;
 
       countries.forEach(function (value, i) {
@@ -11,10 +12,7 @@ fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()).
       });
 
       mapData.forEach(function (value, i) {
-        if(value.name == "United States"){
-          value.name = "United States of America"
-        }
-        var result = countries.findIndex(countries => countries.properties.name === value.name);
+        var result = countries.findIndex(countries => countries.properties.name === value.countryName);
         if(countries[result] != undefined){
           countries[result].properties.value = countries[result].properties.value+1;
         }

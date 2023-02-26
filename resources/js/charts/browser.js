@@ -1,13 +1,14 @@
 import Chart from 'chart.js/auto';
+var browserData = getUniqueListBy(sessionData,'browser');
 new Chart(document.getElementById('browser'),
     {
     type: 'doughnut',
     data: {
-        labels: browserData.map(row => row.label),
+        labels: browserData.map(row => row.browser),
         datasets: [
         {
             label: 'Amount',
-            data: browserData.map(row => row.count)
+            data: browserData.map(row => row.countBrowser)
         }
         ]
     },
@@ -15,3 +16,7 @@ new Chart(document.getElementById('browser'),
         aspectRatio: 1,
     }
 });
+
+function getUniqueListBy(arr, key) {
+    return [...new Map(arr.map(item => [item[key], item])).values()]
+}

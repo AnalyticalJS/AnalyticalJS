@@ -4,10 +4,6 @@
                 
     <div class="mapInner">
 
-        <script>
-            const mapData = @json($mapData);
-        </script>
-
         <canvas id="world" class="squareChart"></canvas>
 
     </div>

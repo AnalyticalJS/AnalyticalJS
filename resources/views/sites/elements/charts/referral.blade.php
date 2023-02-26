@@ -10,13 +10,13 @@
 
                 <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                    <div class="col-8">
+                    <div class="col-10">
 
                         {{$referral->url}}
 
                     </div>
 
-                    <div class="col-4 text-right">
+                    <div class="col-2 text-right">
 
                         {{$referral->count}}
 

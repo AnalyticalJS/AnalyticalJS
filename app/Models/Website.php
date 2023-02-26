@@ -17,4 +17,13 @@ class Website extends Model
     public function sessions() {
         return $this->hasMany('App\Models\Session','website_id','id');
     }
+    public function session_info() {
+        return $this->hasMany('App\Models\Session_information','website_id','id');
+    }
+    public function pages() {
+        return $this->hasMany('App\Models\Page','website_id','id');
+    }
+    public function referrals() {
+        return $this->hasMany('App\Models\Referral','website_id','id');
+    }
 }

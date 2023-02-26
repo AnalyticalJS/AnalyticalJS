@@ -24,6 +24,10 @@
 
     </head>
     <body>
+
+        <script>
+            const sessionData = @json($sessionInfo);
+        </script>
        
         <div class="hero-head">
 

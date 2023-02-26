@@ -6,17 +6,17 @@
 
         <div class="row feedData">
 
-            @foreach($cityData as $city)
+            @foreach($sessionInfo->unique("cityName")->sortByDesc("countCity")->slice(0, 100) as $city)
 
                 <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                    <div class="col-6">
+                    <div class="col-10">
 
                         {{$city->cityName}}
 
                     </div>
 
-                    <div class="col-6 text-right">
+                    <div class="col-2 text-right">
 
                         {{$city->countCity}}
 

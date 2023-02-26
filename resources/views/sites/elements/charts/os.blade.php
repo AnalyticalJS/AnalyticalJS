@@ -4,11 +4,6 @@
                 
     <div class="panelInner">
 
-        <script>
-            const operatingData = @json($operatingData);
-            console.log(operatingData);
-        </script>
-
         <canvas id="osChart" class="squareChart"></canvas>
 
     </div>
