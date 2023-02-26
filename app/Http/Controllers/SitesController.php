@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Request;
 use Carbon\Carbon;
-use App\Models\Page;
 use App\Models\Website;
-use App\Models\Referral;
 use App\Models\Session_information;
 use Illuminate\Support\Collection;
 
@@ -62,7 +60,7 @@ class SitesController extends Controller
                 return $item;
             });
 
-            $pagesData = collect(Page::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
+            /*$pagesData = collect(Page::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
                 $item['count'] = $item->where("url", $item['url'])->count();
                 if($item['url'] == null){
                     $item['url'] = "Not set";
@@ -76,14 +74,12 @@ class SitesController extends Controller
                     $item['url'] = "Not set";
                 }
                 return $item;
-            })->unique("url")->sortByDesc("count")->slice(0, 100);
+            })->unique("url")->sortByDesc("count")->slice(0, 100);*/
             
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))
                                      ->with("realtimeUsers", $realtimeUsers)
                                      ->with("realtimePages", $realtimePages)
-                                     ->with("pagesData", $pagesData)
-                                     ->with("referralData", $referralData)
                                      ->with("sessionInfo", $sessionInfo);
         } else {
             return view('sites.notfound')->with("domain", $domain);

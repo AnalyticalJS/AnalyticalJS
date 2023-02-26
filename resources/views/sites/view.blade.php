@@ -150,40 +150,7 @@
 
                 </div>
 
-                <div class="row">
-
-                    <div class="col-md-12 mt-3 mb-3">
-
-                        <div class="codeSnippet">
-
-                            <h2 class="gradientText">Referral and Page Statistics</h2>
-                            <p>Statistics about the referral data and pages accessed on this website in the past <span class="underlined">24 hours</span>.</p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="row">
-
-                    <div class="col-lg-6 mt-3 mb-3">
-
-                        @include('sites.elements.charts.referral')
-
-                    </div>
-
-                    <div class="col-lg-6 mt-3 mb-3">
-
-                        @include('sites.elements.charts.page')
-
-                    </div>
-
-                </div>
-
                 <div class="spacer20"></div>
-
-            </div>
 
         </div>
 
