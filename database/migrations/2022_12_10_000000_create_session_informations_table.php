@@ -31,6 +31,11 @@ class CreateSessionInformationsTable extends Migration
             $table->string('os_version')->nullable();
             $table->string('os_title')->nullable();
             $table->string('device_type')->nullable();
+            $table->integer('countCountries')->nullable()->default(0);
+            $table->integer('countCity')->nullable()->default(0);
+            $table->integer('countBrowser')->nullable()->default(0);
+            $table->integer('countOs')->nullable()->default(0);
+            $table->integer('countDevice')->nullable()->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

@@ -24,7 +24,12 @@ class Session_information extends Model
         'os_name',
         'os_version',
         'os_title',
-        'device_type'
+        'device_type',
+        'countCountries',
+        'countCity',
+        'countBrowser',
+        'countOs',
+        'countDevice'
     ];
 
     use SoftDeletes;

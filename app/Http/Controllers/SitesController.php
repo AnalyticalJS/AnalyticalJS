@@ -45,20 +45,6 @@ class SitesController extends Controller
             }
 
             $sessionInfo = collect($website->first()->session_info->where('created_at', '>', $lastDay));
-            $sessionInfo->map(function ($item) {
-                $item['countCountries'] = $item->where("countryName", $item['countryName'])->count();
-                $item['countCity'] = $item->where("cityName", $item['cityName'])->count();
-                $item['countBrowser'] = $item->where("browser", $item['browser'])->count();
-                $item['countOs'] = $item->where("os_title", $item['os_title'])->count();
-                $item['countDevice'] = $item->where("device_type", $item['device_type'])->count();
-                if($item['countryName'] == null){
-                    $item['countryName'] = "Not set";
-                }
-                if($item['cityName'] == null){
-                    $item['cityName'] = "Not set";
-                }
-                return $item;
-            });
 
             /*$pagesData = collect(Page::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
                 $item['count'] = $item->where("url", $item['url'])->count();
