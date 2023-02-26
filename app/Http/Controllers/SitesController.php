@@ -47,22 +47,6 @@ class SitesController extends Controller
             $sessionInfo = collect($website->first()->session_info->where('created_at', '>', $lastDay));
             $pagesData = collect($website->first()->pages->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
             $referralData = collect($website->first()->referrals->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
-
-            /*$pagesData = collect(Page::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
-                $item['count'] = $item->where("url", $item['url'])->count();
-                if($item['url'] == null){
-                    $item['url'] = "Not set";
-                }
-                return $item;
-            })->unique("url")->sortByDesc("count")->slice(0, 100);
-
-            $referralData = collect(Referral::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
-                $item['count'] = $item->where("url", $item['url'])->count();
-                if($item['url'] == null){
-                    $item['url'] = "Not set";
-                }
-                return $item;
-            })->unique("url")->sortByDesc("count")->slice(0, 100);*/
             
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))

@@ -10,13 +10,13 @@
 
                 <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                    <div class="col-10">
+                    <div class="col-6">
 
                         {{$country->countryName}}
 
                     </div>
 
-                    <div class="col-2 text-right">
+                    <div class="col-6 text-right">
 
                         {{$country->countCountries}}
 
@@ -25,6 +25,16 @@
                 </div>
 
             @endforeach
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12 text-right">
+
+            <small class="whiteText">Top 100</small>        
 
         </div>
 
