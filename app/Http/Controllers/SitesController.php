@@ -45,6 +45,8 @@ class SitesController extends Controller
             }
 
             $sessionInfo = collect($website->first()->session_info->where('created_at', '>', $lastDay));
+            $pagesData = collect($website->first()->pages->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
+            $referralData = collect($website->first()->referrals->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
 
             /*$pagesData = collect(Page::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get())->map(function ($item) {
                 $item['count'] = $item->where("url", $item['url'])->count();
@@ -66,6 +68,8 @@ class SitesController extends Controller
                                      ->with("daily", array_reverse($days))
                                      ->with("realtimeUsers", $realtimeUsers)
                                      ->with("realtimePages", $realtimePages)
+                                     ->with("pagesData", $pagesData)
+                                     ->with("referralData", $referralData)
                                      ->with("sessionInfo", $sessionInfo);
         } else {
             return view('sites.notfound')->with("domain", $domain);

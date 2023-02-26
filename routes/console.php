@@ -1,6 +1,8 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\Page;
+use App\Models\Referral;
 use App\Models\Session_information;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -32,6 +34,20 @@ Artisan::command('countDupes', function () {
             "countDevice" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("device_type", $info->device_type)->count()
         ]);
         $this->comment("Updated - ".$info->id);
+    }
+    $pages = Page::where('created_at', '>', $lastDay);
+    foreach($pages->get() as $page){
+        Page::where("id", $page->id)->update([
+            "count" => Page::where('created_at', '>', $lastDay)->where("website_id", $page->website_id)->where("url", $page->url)->count()
+        ]);
+        $this->comment("Updated - ".$page->id);
+    }
+    $referrals = Referral::where('created_at', '>', $lastDay);
+    foreach($referrals->get() as $referral){
+        Referral::where("id", $referral->id)->update([
+            "count" => Referral::where('created_at', '>', $lastDay)->where("website_id", $referral->website_id)->where("url", $referral->url)->count()
+        ]);
+        $this->comment("Updated - ".$referral->id);
     }
     $this->comment("Done!");
 })->purpose('Counts the duplicates and saves it.');
