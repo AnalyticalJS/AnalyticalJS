@@ -94,7 +94,7 @@ class SitesController extends Controller
                 }
                 return $item;
             });
-            $countryData = $countryData->unique("countryName")->sortByDesc("countCountries");
+            $countryData = $countryData->unique("countryName")->sortByDesc("countCountries")->slice(0, 100);
 
             $cityData = $collectionSessionInfo;
             $cityData->map(function ($item) {
@@ -104,7 +104,7 @@ class SitesController extends Controller
                 }
                 return $item;
             });
-            $cityData = $cityData->unique("cityName")->sortByDesc("countCity");
+            $cityData = $cityData->unique("cityName")->sortByDesc("countCity")->slice(0, 100);
 
             $pagesData = $collectionPages;
             $pagesData->map(function ($item) {
@@ -114,7 +114,7 @@ class SitesController extends Controller
                 }
                 return $item;
             });
-            $pagesData = $pagesData->unique("url")->sortByDesc("count");
+            $pagesData = $pagesData->unique("url")->sortByDesc("count")->slice(0, 100);
 
             $referralData = $collectionReferrals;
             $referralData->map(function ($item) {
@@ -124,7 +124,7 @@ class SitesController extends Controller
                 }
                 return $item;
             });
-            $referralData = $referralData->unique("url")->sortByDesc("count");
+            $referralData = $referralData->unique("url")->sortByDesc("count")->slice(0, 100);
             
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))
