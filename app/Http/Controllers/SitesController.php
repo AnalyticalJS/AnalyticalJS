@@ -28,7 +28,7 @@ class SitesController extends Controller
             $days = array();
             $mapData = array();
             $browserData = array();
-            $osData = array();
+            $operatingData = array();
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
             $realtimeUsers = $website->first()->sessions->where('updated_at', '>', $mins)->count();
@@ -56,18 +56,18 @@ class SitesController extends Controller
             $sessionInfo = Session_information::where("website_id", $website->first()->id)->where('created_at', '>', $lastDay)->get();
             $collection = collect($sessionInfo)->unique("browser");
             foreach($collection as $index => $browser){
-                $browserData[$index] = [
+                array_push($browserData, [
                     "label" => $browser->browser,
                     "count" => $sessionInfo->where("browser", $browser->browser)->count()
-                ];
+                ]);
             }
 
             $collection2 = collect($sessionInfo)->unique("os_title");
             foreach($collection2 as $index => $os){
-                $osData[$index] = [
+                array_push($operatingData, [
                     "label" => $os->os_title,
-                    "count" => $sessionInfo->where("os_title", $os->os_title)->count()
-                ];
+                    "count" => $sessionInfo->where("os_family", $os->os_family)->count()
+                ]);
             }
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))
@@ -75,7 +75,7 @@ class SitesController extends Controller
                                      ->with("realtimePages", $realtimePages)
                                      ->with("mapData", $mapData)
                                      ->with("browserData", $browserData)
-                                     ->with("osData", $osData);
+                                     ->with("operatingData", $operatingData);
         } else {
             return view('sites.notfound')->with("domain", $domain);
         }

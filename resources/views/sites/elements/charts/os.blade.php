@@ -5,7 +5,8 @@
     <div class="panelInner">
 
         <script>
-            const osData = @json($osData);
+            const operatingData = @json($operatingData);
+            console.log(operatingData);
         </script>
 
         <canvas id="osChart" class="squareChart"></canvas>

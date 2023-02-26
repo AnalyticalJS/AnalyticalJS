@@ -7,9 +7,7 @@ new Chart(document.getElementById('browser'),
         datasets: [
         {
             label: 'Amount',
-            data: browserData.map(row => row.count),
-            borderColor: '#22ddb7',
-            backgroundColor: '#c2fff3'
+            data: browserData.map(row => row.count)
         }
         ]
     },

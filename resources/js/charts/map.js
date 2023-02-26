@@ -11,6 +11,9 @@ fetch('https://unpkg.com/world-atlas/countries-50m.json').then((r) => r.json()).
       });
 
       mapData.forEach(function (value, i) {
+        if(value.name == "United States"){
+          value.name = "United States of America"
+        }
         var result = countries.findIndex(countries => countries.properties.name === value.name);
         if(countries[result] != undefined){
           countries[result].properties.value = countries[result].properties.value+1;

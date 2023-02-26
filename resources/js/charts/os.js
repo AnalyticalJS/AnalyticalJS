@@ -3,13 +3,11 @@ new Chart(document.getElementById('osChart'),
     {
     type: 'doughnut',
     data: {
-        labels: osData.map(row => row.label),
+        labels: operatingData.map(row => row.label),
         datasets: [
         {
             label: 'Amount',
-            data: osData.map(row => row.count),
-            borderColor: '#22ddb7',
-            backgroundColor: '#c2fff3'
+            data: operatingData.map(row => row.count)
         }
         ]
     },
