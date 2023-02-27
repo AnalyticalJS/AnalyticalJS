@@ -8,21 +8,25 @@
 
             @foreach($sessionInfo->unique("cityName")->sortByDesc("countCity")->slice(0, 100) as $city)
 
-                <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
+                @if($city->countCity > 0)
 
-                    <div class="col-6">
+                    <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                        {{$city->cityName}}
+                        <div class="col-9">
+
+                            {{$city->cityName}}
+
+                        </div>
+
+                        <div class="col-3 text-right">
+
+                            {{$city->countCity}}
+
+                        </div>
 
                     </div>
 
-                    <div class="col-6 text-right">
-
-                        {{$city->countCity}}
-
-                    </div>
-
-                </div>
+                @endif
 
             @endforeach
 

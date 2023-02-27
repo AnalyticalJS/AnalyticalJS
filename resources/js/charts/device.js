@@ -1,5 +1,4 @@
 import Chart from 'chart.js/auto';
-var deviceData = getUniqueListBy(sessionData,'device_type');
 new Chart(document.getElementById('device'),
     {
     type: 'doughnut',

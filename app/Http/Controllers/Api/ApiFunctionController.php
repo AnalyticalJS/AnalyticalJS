@@ -33,6 +33,7 @@ class ApiFunctionController
         $useragent = Request::server('HTTP_USER_AGENT');
         $Browser = new BrowserDetection;
         $browserInfo = $Browser->getAll($useragent);
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
 
         if(str_contains($ip, "192.168") && env("APP_ENV") == "Production") {
             $failed = true;
@@ -86,6 +87,11 @@ class ApiFunctionController
                 $sessionInfo['os_version'] = $browserInfo['os_version'];
                 $sessionInfo['os_title'] = $browserInfo['os_title'];
                 $sessionInfo['device_type'] = $browserInfo['device_type'];
+                $sessionInfo["countCountries"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("countryName", $info->countryName)->count();
+                $sessionInfo["countCity"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("cityName", $info->cityName)->count();
+                $sessionInfo["countBrowser"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("browser", $info->browser)->count();
+                $sessionInfo["countOs"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("os_title", $info->os_title)->count();
+                $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("device_type", $info->device_type)->count();
                 if(isset($currentUserInfo->countryName)){
                     $sessionInfo['countryName'] = $currentUserInfo->countryName;
                     $sessionInfo['countryCode'] = $currentUserInfo->countryCode;

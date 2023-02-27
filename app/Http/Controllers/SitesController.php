@@ -44,7 +44,7 @@ class SitesController extends Controller
                 ]);
             }
 
-            $sessionInfo = collect($website->first()->session_info->where('created_at', '>', $lastDay));
+            $sessionInfo = collect($website->first()->session_info->where('created_at', '>', $lastDay))->values();
             $pagesData = collect($website->first()->pages->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
             $referralData = collect($website->first()->referrals->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
             

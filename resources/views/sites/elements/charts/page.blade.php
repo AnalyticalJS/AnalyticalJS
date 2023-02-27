@@ -8,21 +8,25 @@
 
             @foreach($pagesData as $pages)
 
-                <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
+                @if($pages->count > 0)
 
-                    <div class="col-6">
+                    <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                        {{$pages->url}}
+                        <div class="col-9">
+
+                            {{$pages->url}}
+
+                        </div>
+
+                        <div class="col-3 text-right">
+
+                            {{$pages->count}}
+
+                        </div>
 
                     </div>
 
-                    <div class="col-6 text-right">
-
-                        {{$pages->count}}
-
-                    </div>
-
-                </div>
+                @endif
 
             @endforeach
 

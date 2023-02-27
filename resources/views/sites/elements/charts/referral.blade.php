@@ -8,21 +8,25 @@
 
             @foreach($referralData as $referral)
 
-                <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
+                @if($referral->count > 0)
 
-                    <div class="col-6">
+                    <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                        {{$referral->url}}
+                        <div class="col-9">
+
+                            {{$referral->url}}
+
+                        </div>
+
+                        <div class="col-3 text-right">
+
+                            {{$referral->count}}
+
+                        </div>
 
                     </div>
-
-                    <div class="col-6 text-right">
-
-                        {{$referral->count}}
-
-                    </div>
-
-                </div>
+                
+                @endif
 
             @endforeach
 

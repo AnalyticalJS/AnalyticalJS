@@ -8,21 +8,25 @@
 
             @foreach($sessionInfo->unique("countryName")->sortByDesc("countCountries")->slice(0, 100) as $country)
 
-                <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
+                @if($country->countCountries > 0)
 
-                    <div class="col-6">
+                    <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
-                        {{$country->countryName}}
+                        <div class="col-9">
+
+                            {{$country->countryName}}
+
+                        </div>
+
+                        <div class="col-3 text-right">
+
+                            {{$country->countCountries}}
+
+                        </div>
 
                     </div>
 
-                    <div class="col-6 text-right">
-
-                        {{$country->countCountries}}
-
-                    </div>
-
-                </div>
+                @endif
 
             @endforeach
 

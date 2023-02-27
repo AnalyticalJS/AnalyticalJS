@@ -1,5 +1,4 @@
 import Chart from 'chart.js/auto';
-var operatingData = getUniqueListBy(sessionData,'os_title');
 new Chart(document.getElementById('osChart'),
     {
     type: 'doughnut',

@@ -1,5 +1,4 @@
 import Chart from 'chart.js/auto';
-var browserData = getUniqueListBy(sessionData,'browser');
 new Chart(document.getElementById('browser'),
     {
     type: 'doughnut',
