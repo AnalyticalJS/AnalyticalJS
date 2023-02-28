@@ -87,11 +87,9 @@ class ApiFunctionController
                 $sessionInfo['os_version'] = $browserInfo['os_version'];
                 $sessionInfo['os_title'] = $browserInfo['os_title'];
                 $sessionInfo['device_type'] = $browserInfo['device_type'];
-                $sessionInfo["countCountries"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("countryName", $info->countryName)->count();
-                $sessionInfo["countCity"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("cityName", $info->cityName)->count();
-                $sessionInfo["countBrowser"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("browser", $info->browser)->count();
-                $sessionInfo["countOs"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("os_title", $info->os_title)->count();
-                $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("device_type", $info->device_type)->count();
+                $sessionInfo["countBrowser"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("browser", $browserInfo['browser_name'])->count();
+                $sessionInfo["countOs"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("os_title", $browserInfo['os_title'])->count();
+                $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("device_type", $browserInfo['device_type'];)->count();
                 if(isset($currentUserInfo->countryName)){
                     $sessionInfo['countryName'] = $currentUserInfo->countryName;
                     $sessionInfo['countryCode'] = $currentUserInfo->countryCode;
@@ -99,6 +97,8 @@ class ApiFunctionController
                     $sessionInfo['latitude'] = $currentUserInfo->latitude; 
                     $sessionInfo['longitude'] = $currentUserInfo->longitude; 
                     $sessionInfo['timezone'] = $currentUserInfo->timezone; 
+                    $sessionInfo["countCountries"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("countryName", $currentUserInfo->countryName)->count();
+                    $sessionInfo["countCity"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("cityName", $currentUserInfo->cityName)->count();
                 }
                 $newSessionInfo = Session_information::create($sessionInfo);
             }
