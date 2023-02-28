@@ -89,7 +89,7 @@ class ApiFunctionController
                 $sessionInfo['device_type'] = $browserInfo['device_type'];
                 $sessionInfo["countBrowser"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("browser", $browserInfo['browser_name'])->count();
                 $sessionInfo["countOs"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("os_title", $browserInfo['os_title'])->count();
-                $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("device_type", $browserInfo['device_type'];)->count();
+                $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("device_type", $browserInfo['device_type'])->count();
                 if(isset($currentUserInfo->countryName)){
                     $sessionInfo['countryName'] = $currentUserInfo->countryName;
                     $sessionInfo['countryCode'] = $currentUserInfo->countryCode;
