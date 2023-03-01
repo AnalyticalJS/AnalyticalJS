@@ -25,18 +25,18 @@ class ApiFunctionController
 
     public function initDetails()
     {
+        $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        $website = Website::where("domain",$referrerDomain);
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
         if(!Crawler::isCrawler()) {
             $data = Request::all();
             $ip = Request::ip();
             $id = 0;
-            $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
-            $website = Website::where("domain",$referrerDomain);
             $page = $data['page'];
             $referral = $data['referrer'];
             $useragent = Request::server('HTTP_USER_AGENT');
             $Browser = new BrowserDetection;
             $browserInfo = $Browser->getAll($useragent);
-            $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
 
             if(str_contains($ip, "192.168") && env("APP_ENV") == "Production") {
                 $failed = true;
@@ -121,8 +121,11 @@ class ApiFunctionController
                 "failed" => $failed
                 ];
         } else {
+            $bot = Crawler::getMatches();
             Bot::create([
-                "bot" => Crawler::getMatches()
+                "website_id" => $website->first()->id,
+                "bot" => $bot,
+                "count" => Bot::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("bot",$bot)->count();
             ]);
         }
     }
