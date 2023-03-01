@@ -122,7 +122,7 @@ class ApiFunctionController
                 ];
         } else {
             Bot::create([
-                "bot" => Crawler::getMatches();
+                "bot" => Crawler::getMatches()
             ]);
         }
     }
