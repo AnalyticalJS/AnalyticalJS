@@ -120,10 +120,10 @@ class ApiFunctionController
                 "referrerDomain" => $referrerDomain,
                 "failed" => $failed
                 ];
+        } else {
+            Bot::create([
+                "bot" => Crawler::->getMatches();
+            ]);
         }
-    } else {
-        Bot::create([
-            "bot" => Crawler::->getMatches();
-        ]);
     }
 }
