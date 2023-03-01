@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Stevebauman\Location\LocationServiceProvider::class,
+        Jaybizzle\LaravelCrawlerDetect\LaravelCrawlerDetectServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -231,6 +232,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Location' => Stevebauman\Location\Facades\Location::class,
+        'Crawler'   => Jaybizzle\LaravelCrawlerDetect\Facades\LaravelCrawlerDetect::class,
         /* Custom Classes */
         'GlobalFunc' => App\Helpers\GlobalFunc::class,
         'PaginatePages' => App\Helpers\PaginatePages::class,
