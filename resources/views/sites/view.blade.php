@@ -27,6 +27,8 @@
 
         <script>
             const sessionData = @json($sessionInfo);
+            const crawlerData = @json($bots);
+            const botData = sortBy(getUniqueListBy(@json($website->bots),'bot'), "count").slice(0,10);
             const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
             const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
             const deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
@@ -143,21 +145,52 @@
 
                 <div class="row">
 
-                    <div class="col-lg-4 mt-3 mb-3">
+                    <div class="col-lg-4 col-md-6 mt-3 mb-3">
 
                         @include('sites.elements.charts.browser')
 
                     </div>
 
-                    <div class="col-lg-4 mt-3 mb-3">
+                    <div class="col-lg-4 col-md-6 mt-3 mb-3">
 
                         @include('sites.elements.charts.os')
 
                     </div>
 
-                    <div class="col-lg-4 mt-3 mb-3">
+                    <div class="col-lg-4 col-md-6 mt-3 mb-3">
 
                         @include('sites.elements.charts.device')
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="codeSnippet">
+
+                            <h2 class="gradientText">Bots and Crawler Statistics</h2>
+                            <p>Statistics about the bots that crawled this website in the past <span class="underlined">24 hours</span>.</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-4 col-md-6 mt-3 mb-3 justify-content-center">
+
+                        @include('sites.elements.charts.bots')
+
+                    </div>
+
+                    <div class="col-lg-8 col-md-6 mt-3 mb-3 justify-content-center">
+
+                        @include('sites.elements.charts.crawler')
 
                     </div>
 

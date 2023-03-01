@@ -26,4 +26,7 @@ class Website extends Model
     public function referrals() {
         return $this->hasMany('App\Models\Referral','website_id','id');
     }
+    public function bots() {
+        return $this->hasMany('App\Models\Bot','website_id','id');
+    }
 }

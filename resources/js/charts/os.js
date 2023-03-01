@@ -15,6 +15,3 @@ new Chart(document.getElementById('osChart'),
         aspectRatio: 1,
     }
 });
-function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map(item => [item[key], item])).values()]
-}

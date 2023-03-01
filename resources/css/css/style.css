@@ -339,3 +339,7 @@ a.underlined:hover:after{
 .whiteText{
     color:#FFF;
 }
+
+.shortChart{
+    max-height:300px;
+}

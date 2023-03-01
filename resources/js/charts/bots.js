@@ -1,13 +1,13 @@
 import Chart from 'chart.js/auto';
-new Chart(document.getElementById('device'),
+new Chart(document.getElementById('bots'),
     {
     type: 'doughnut',
     data: {
-        labels: deviceData.map(row => row.device_type),
+        labels: botData.map(row => row.bot),
         datasets: [
         {
             label: 'Amount',
-            data: deviceData.map(row => row.countDevice)
+            data: botData.map(row => row.count)
         }
         ]
     },

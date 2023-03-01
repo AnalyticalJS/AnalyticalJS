@@ -16,6 +16,6 @@
 
     <div class="codeSnippet copyBtn" id="codeSnippet" data-clipboard-target="#codeCopy">
         <span class="gradientTextReverse">
-           <span id="codeCopy">{{ '<script src="'.asset('js/analytical.js').'" defer></script>' }}</span>
+           <span id="codeCopy">{{ '<script src="'.asset('js/analytical.js').'"></script>' }}</span>
         </span>
     </div>
