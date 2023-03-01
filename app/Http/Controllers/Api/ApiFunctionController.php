@@ -26,15 +26,15 @@ class ApiFunctionController
     public function initDetails()
     {
         $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        $useragent = Request::server('HTTP_USER_AGENT');
         $website = Website::where("domain",$referrerDomain);
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
-        if(!Crawler::isCrawler()) {
+        if(!Crawler::isCrawler($useragent)) {
             $data = Request::all();
             $ip = Request::ip();
             $id = 0;
             $page = $data['page'];
             $referral = $data['referrer'];
-            $useragent = Request::server('HTTP_USER_AGENT');
             $Browser = new BrowserDetection;
             $browserInfo = $Browser->getAll($useragent);
 
@@ -127,6 +127,13 @@ class ApiFunctionController
                 "bot" => $bot,
                 "count" => Bot::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("bot",$bot)->count()
             ]);
+            return [
+                "id" => "error",
+                "userIP" => "error", 
+                "referrer" => "error",
+                "referrerDomain" => "error",
+                "failed" => true
+                ];
         }
     }
 }
