@@ -38,7 +38,7 @@ class SitesController extends Controller
                 $hourEnd = Carbon::now()->subHours($i)->endOfHour()->toDateTimeString();
                 $sessions = $website->first()->sessions()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
                 $pages = $website->first()->sessions()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->sum("pages");
-                $theBots = $website->first()->sessions()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
+                $theBots = $website->first()->bots()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
                 array_push($days, [
                     "hour" => $hourDisplay,
                     "sessions" => $sessions,
@@ -60,7 +60,7 @@ class SitesController extends Controller
                                      ->with("realtimePages", $realtimePages)
                                      ->with("pagesData", $pagesData)
                                      ->with("referralData", $referralData)
-                                     ->with("bots", $bots)
+                                     ->with("bots", array_reverse($bots))
                                      ->with("sessionInfo", $sessionInfo);
         } else {
             return view('sites.notfound')->with("domain", $domain);

@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\Bot;
 use App\Models\Page;
 use App\Models\Referral;
 use App\Models\Website;
@@ -64,6 +65,14 @@ Artisan::command('countDupes', function () {
             Referral::where("id", $referral->id)->delete();
         }
         $this->comment("Updated - ".$referral->id." Referrals");
+    }
+
+    $bots = Bot::where('created_at', '>', $lastDay);
+    foreach($bots->get() as $bot){
+        Bot::where("id", $bot->id)->update([
+            "count" => Bot::where('created_at', '>', $lastDay)->where("website_id", $bot->website_id)->where("bot", $bot->bot)->count()
+        ]);
+        $this->comment("Updated - ".$bot->id." Bots");
     }
     $this->comment("Done!");
 })->purpose('Counts the duplicates and saves it.');
