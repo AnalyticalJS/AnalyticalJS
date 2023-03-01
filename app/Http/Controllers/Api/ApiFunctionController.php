@@ -125,7 +125,7 @@ class ApiFunctionController
             Bot::create([
                 "website_id" => $website->first()->id,
                 "bot" => $bot,
-                "count" => Bot::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("bot",$bot)->count();
+                "count" => Bot::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("bot",$bot)->count()
             ]);
         }
     }
