@@ -6,6 +6,7 @@ use Request;
 use Crawler;
 use Carbon\Carbon;
 use App\Models\Page;
+use App\Models\Bot;
 use App\Models\Website;
 use App\Models\Session;
 use App\Models\Referral;
@@ -120,5 +121,9 @@ class ApiFunctionController
                 "failed" => $failed
                 ];
         }
+    } else {
+        Bot::create([
+            "bot" => Crawler::->getMatches();
+        ]);
     }
 }

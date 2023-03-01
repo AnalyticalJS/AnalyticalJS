@@ -13,7 +13,7 @@ class Referral extends Model
         'session_id',
         'pages',
         'url',
-        'date',
+        'count',
         'referral_url'
     ];
 
