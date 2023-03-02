@@ -7,7 +7,7 @@ new Chart(document.getElementById('daily'),
         datasets: [
         {
             label: 'Pages',
-            data: data2.map(row => row.pages),
+            data: data.map(row => row.pages),
             borderColor: '#22ddb7',
             backgroundColor: '#c2fff3'
         },

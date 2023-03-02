@@ -6,7 +6,6 @@
 
         <script>
             const data = @json($daily);
-            const data2 = @json($daily);
         </script>
 
         <canvas id="daily" class="chart"></canvas>

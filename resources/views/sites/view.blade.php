@@ -27,7 +27,6 @@
 
         <script>
             const sessionData = @json($sessionInfo);
-            const crawlerData = @json($bots);
             const botData = sortBy(getUniqueListBy(@json($website->bots),'bot'), "count").slice(0,10);
             const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
             const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
