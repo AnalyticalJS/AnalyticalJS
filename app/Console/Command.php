@@ -33,8 +33,8 @@ class Command
                     "bots" => $theBots
                 ]);
             }
-            $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
-            $referralData = collect($website->referrals->where('created_at', '>', $lastDay))->unique("url")->sortByDesc("count");
+            $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
+            $referralData = collect($website->referrals->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $website->update([
                 "dailySessions" => $days,
                 "dailyReferral" => $referralData->values(),
