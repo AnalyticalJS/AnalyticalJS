@@ -9,10 +9,19 @@ class Website extends Model
 {
 
     protected $fillable = [
-        'domain'
+        'domain',
+        'dailySessions',
+        'dailyReferral',
+        'dailyPages'
     ];
 
     use SoftDeletes;
+
+    protected $casts = [
+        'dailySessions' => 'array',
+        'dailyReferral' => 'array',
+        'dailyPages' => 'array'
+    ];
 
     public function sessions() {
         return $this->hasMany('App\Models\Session','website_id','id');

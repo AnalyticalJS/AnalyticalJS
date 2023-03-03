@@ -8,19 +8,19 @@
 
             @foreach($referralData as $referral)
 
-                @if($referral->count > 0)
+                @if($referral['count'] > 0)
 
                     <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
                         <div class="col-9">
 
-                            {{$referral->url}}
+                            {{$referral['url']}}
 
                         </div>
 
                         <div class="col-3 text-right">
 
-                            {{$referral->count}}
+                            {{$referral['count']}}
 
                         </div>
 

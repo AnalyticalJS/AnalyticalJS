@@ -16,6 +16,9 @@ class CreateWebsitesTable extends Migration
         Schema::create('websites', function (Blueprint $table) {
             $table->id();
             $table->string('domain');
+            $table->json('dailySessions')->nullable();
+            $table->json('dailyReferral')->nullable();
+            $table->json('dailyPages')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

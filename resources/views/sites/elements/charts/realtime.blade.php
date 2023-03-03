@@ -6,7 +6,7 @@
 
         <div class="largeNumber gradientText">{{GlobalFunc::count_format2($realtime->count())}}</div>
 
-        <small>Users active in the last 30 minutes</small>
+        <small>Sessions active in the last 30 minutes</small>
 
     </div>
 

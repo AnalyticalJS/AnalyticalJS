@@ -17,11 +17,13 @@ class Session extends Model
 
     use SoftDeletes;
 
-    protected $hidden = [
-        'ip'
-    ];
-
-    public function session_info() {
+    public function info() {
         return $this->hasOne('App\Models\Session_information','session_id','id');
+    }
+    public function referrals() {
+        return $this->hasOne('App\Models\Referral','session_id','id');
+    }
+    public function pages() {
+        return $this->hasOne('App\Models\Page','session_id','id');
     }
 }

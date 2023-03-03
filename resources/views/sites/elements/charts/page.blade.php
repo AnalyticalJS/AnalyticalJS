@@ -8,19 +8,19 @@
 
             @foreach($pagesData as $pages)
 
-                @if($pages->count > 0)
+                @if($pages['count'] > 0)
 
                     <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 
                         <div class="col-9">
 
-                            {{$pages->url}}
+                            {{$pages['url']}}
 
                         </div>
 
                         <div class="col-3 text-right">
 
-                            {{$pages->count}}
+                            {{$pages['count']}}
 
                         </div>
 
