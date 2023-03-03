@@ -18,7 +18,7 @@ new Chart(document.getElementById('crawler'),
                 }
                 return getGradient(ctx, chartArea);
               },
-            backgroundColor: '#bf9af7'
+            backgroundColor: '#c2fff3'
         }
         ]
     },
