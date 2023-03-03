@@ -8,7 +8,7 @@
 
             @foreach($pagesData as $pages)
 
-                @if($pages['count'] > 0)
+                @if($pages['count'] > 0 && str_contains($pages['url'], $website->domain))
 
                     <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 

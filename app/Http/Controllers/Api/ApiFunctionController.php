@@ -40,6 +40,13 @@ class ApiFunctionController
 
             if(str_contains($ip, "192.168") || str_contains($ip, "127.0") || env("APP_ENV") == "Production") {
                 $failed = true;
+                return [
+                    "id" => "error",
+                    "userIP" => "error", 
+                    "referrer" => "error",
+                    "referrerDomain" => "error",
+                    "failed" => true
+                    ];
             } else if($website->get()->count() > 0){
                 $failed = false;
                 $session = Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("ip", $ip)->where("website_id", $website->first()->id);
