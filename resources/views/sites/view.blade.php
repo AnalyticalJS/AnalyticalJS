@@ -27,6 +27,7 @@
 
         <script>
             const sessionData = @json($sessionInfo);
+            const referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
             const botData = sortBy(getUniqueListBy(@json($website->bots),'bot'), "count").slice(0,10);
             const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
             const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
@@ -218,12 +219,22 @@
 
                     </div>
 
-                    <div class="col-lg-12 mt-3 mb-3">
+                </div>
+
+                <div class="row">
+
+
+                    <div class="col-lg-8 mt-3 mb-3">
 
                         @include('sites.elements.charts.referral')
 
                     </div>
 
+                    <div class="col-lg-4 mt-3 mb-3">
+
+                        @include('sites.elements.charts.referralType')
+
+                    </div>
 
                 </div>
 

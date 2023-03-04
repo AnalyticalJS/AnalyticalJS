@@ -41,6 +41,9 @@ class Command
             $referralTypesData = $referrals->unique("type");
             foreach($referralTypesData as $index => $type){
                 $type->typeCount = Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->count();
+                if($type->type == null){
+                    $type->type = "Direct or unknown";
+                }
             }
             $website->update([
                 "dailySessions" => $days,

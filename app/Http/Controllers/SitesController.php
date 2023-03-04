@@ -27,6 +27,7 @@ class SitesController extends Controller
             $days = [];
             $pagesData = [];
             $referralData = [];
+            $referralTypeData = [];
 
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
@@ -44,6 +45,9 @@ class SitesController extends Controller
             if($theWebsite->dailyReferral != null){
                 $referralData = $theWebsite->dailyReferral;
             }
+            if($theWebsite->dailyReferralTypes != null){
+                $referralTypeData = $theWebsite->dailyReferralTypes;
+            }
             $sessionInfo = collect($session_info)->values();
 
             return view('sites.view')->with("website", $website->first())
@@ -51,6 +55,7 @@ class SitesController extends Controller
                                      ->with("realtime", $realtime)
                                      ->with("pagesData", $pagesData)
                                      ->with("referralData", $referralData)
+                                     ->with("referralTypeData", $referralTypeData)
                                      ->with("sessionInfo", $sessionInfo);
         } else {
             return view('sites.notfound')->with("domain", $domain);

@@ -326,7 +326,7 @@ a.underlined:hover:after{
 
 .feedData{
     text-align:left;
-    height:200px;
+    height:290px;
     overflow-y:auto;
     margin: 5px;
     line-break: anywhere;
