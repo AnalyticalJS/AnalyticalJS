@@ -39,7 +39,9 @@ class GlobalFunc
     public static function contains($value, array $array)
     {
         foreach($array as $a) {
-            if (stripos($value,$a) !== false) return true;
+            if (str_contains($value, trim($a))){
+                return "Success !! ^^^ SEARCH FOUND ^^^ ".$a;
+            }
         }
         return false;
     }

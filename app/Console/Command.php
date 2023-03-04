@@ -38,9 +38,10 @@ class Command
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
             $referralData = $referrals->unique("url")->take(100)->sortByDesc("count");
-            $referralTypesData = $referrals->unique("type");
+            $referralTypesData = $referrals->unique("type")->sortByDesc("count");
             foreach($referralTypesData as $index => $type){
-                $type->typeCount = Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->first()->count;
+                $ref = collect(Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->get());
+                $type->typeCount = $ref->sortByDesc("count")->count();
                 if($type->type == null){
                     $type->type = "Direct or unknown";
                 }
@@ -93,26 +94,32 @@ class Command
                 $search = explode("|",file_get_contents(base_path()."/public_html/search.txt"));
                 $social = explode("|",file_get_contents(base_path()."/public_html/social.txt"));
                 $video = explode("|",file_get_contents(base_path()."/public_html/video.txt"));
-                if(GlobalFunc::contains($session->referrals->url, $search) == true){
+                //$command->comment(print_r($search));
+                $test = GlobalFunc::contains($session->referrals->url, $search);
+                $command->comment("Test ".$test);
+                $searchResult = GlobalFunc::contains($session->referrals->url, $search);
+                $socialResult = GlobalFunc::contains($session->referrals->url, $social);
+                $videoResult = GlobalFunc::contains($session->referrals->url, $video);
+                if($searchResult != false){
                     Referral::where("id", $session->referrals->id)->update([
-                        "type" => "Search",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Search")->first()->count
+                        "type" => "Search"
                     ]);
-                }  else if(GlobalFunc::contains($session->referrals->url, $social) == true){
+                    $command->comment("Search match success - ".$searchResult);
+                }  else if($socialResult != false){
                     Referral::where("id", $session->referrals->id)->update([
-                        "type" => "Social",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Social")->first()->count
+                        "type" => "Social"
                     ]);
-                } else if(GlobalFunc::contains($session->referrals->url, $video) == true){
+                    $command->comment("Social match success - ".$socialResult);
+                } else if($videoResult != false){
                     Referral::where("id", $session->referrals->id)->update([
-                        "type" => "Video",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Video")->first()->count
+                        "type" => "Video"
                     ]);
+                    $command->comment("Video match success - ".$videoResult);
                 } else {
                     Referral::where("id", $session->referrals->id)->update([
-                        "type" => "Referral",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Referral")->first()->count
+                        "type" => "Referral"
                     ]);
+                    $command->comment("Set as referral");
                 }
             }
             foreach($session->pages()->get() as $page){
