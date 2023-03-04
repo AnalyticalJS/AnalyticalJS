@@ -40,7 +40,7 @@ class Command
             $referralData = $referrals->unique("url")->take(100)->sortByDesc("count");
             $referralTypesData = $referrals->unique("type");
             foreach($referralTypesData as $index => $type){
-                $type->typeCount = Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->count();
+                $type->typeCount = Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->sum("count");
                 if($type->type == null){
                     $type->type = "Direct or unknown";
                 }
@@ -96,22 +96,22 @@ class Command
                 if(GlobalFunc::contains($session->referrals->url, $search) == true){
                     Referral::where("id", $session->referrals->id)->update([
                         "type" => "Search",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Search")->count()
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Search")->sum("count")
                     ]);
                 }  else if(GlobalFunc::contains($session->referrals->url, $social) == true){
                     Referral::where("id", $session->referrals->id)->update([
                         "type" => "Social",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Social")->count()
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Social")->sum("count")
                     ]);
                 } else if(GlobalFunc::contains($session->referrals->url, $video) == true){
                     Referral::where("id", $session->referrals->id)->update([
                         "type" => "Video",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Video")->count()
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Video")->sum("count")
                     ]);
                 } else {
                     Referral::where("id", $session->referrals->id)->update([
                         "type" => "Referral",
-                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Referral")->count()
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Referral")->sum("count")
                     ]);
                 }
             }
