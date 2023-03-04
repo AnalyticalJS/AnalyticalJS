@@ -41,9 +41,8 @@ class Command
             $referralTypesData = $referrals->unique("type")->sortByDesc("count");
             foreach($referralTypesData as $index => $type){
                 $ref = collect(Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->get());
-                $type->typeCount = $ref->sortByDesc("count")->count();
-                if($type->type == null){
-                    $type->type = "Direct or unknown";
+                if($type->type != null){
+                    $type->typeCount = $ref->sortByDesc("count")->count();
                 }
             }
             $website->update([
