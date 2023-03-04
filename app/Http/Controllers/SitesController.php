@@ -40,10 +40,10 @@ class SitesController extends Controller
                 $days = $theWebsite->dailySessions;
             }
             if($theWebsite->dailyPages != null){
-                $pagesData = $theWebsite->dailyPages;
+                $pagesData = collect($theWebsite->dailyPages);
             }
             if($theWebsite->dailyReferral != null){
-                $referralData = $theWebsite->dailyReferral;
+                $referralData = collect($theWebsite->dailyReferral);
             }
             if($theWebsite->dailyReferralTypes != null){
                 $referralTypeData = $theWebsite->dailyReferralTypes;

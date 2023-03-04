@@ -6,6 +6,25 @@
 
         <div class="row feedData">
 
+                
+                <div class="row">
+
+                    <div class="col-9">
+
+                        <strong>Referral URL</strong>
+
+                    </div>
+
+                    <div class="col-3 text-right">
+
+                        <strong>Total {{$referralData->sum("count")}}</strong>
+
+                    </div>
+
+                </div>
+
+                <hr/>
+
             @foreach($referralData as $referral)
 
                 @if($referral['count'] > 0)
