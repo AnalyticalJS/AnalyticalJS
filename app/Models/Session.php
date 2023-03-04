@@ -24,6 +24,6 @@ class Session extends Model
         return $this->hasOne('App\Models\Referral','session_id','id');
     }
     public function pages() {
-        return $this->hasOne('App\Models\Page','session_id','id');
+        return $this->hasMany('App\Models\Page','session_id','id');
     }
 }

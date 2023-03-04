@@ -14,6 +14,8 @@ class Referral extends Model
         'pages',
         'url',
         'count',
+        'type',
+        'typeCount',
         'referral_url'
     ];
 

@@ -1,11 +1,13 @@
 <?php
 namespace App\Console;
 
+use GlobalFunc;
 use Carbon\Carbon;
 use App\Models\Bot;
 use App\Models\Page;
 use App\Models\Referral;
 use App\Models\Website;
+use App\Models\Session;
 use App\Models\Session_information;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -34,59 +36,92 @@ class Command
                 ]);
             }
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
-            $referralData = collect($website->referrals->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
+            $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
+            $referralData = $referrals->unique("url")->take(100)->sortByDesc("count");
+            $referralTypesData = $referrals->unique("type");
+            foreach($referralTypesData as $index => $type){
+                $type->typeCount = Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->count();
+            }
             $website->update([
                 "dailySessions" => $days,
                 "dailyReferral" => $referralData->values(),
+                "dailyReferralTypes" => $referralTypesData->values(),
                 "dailyPages" => $pagesData->values()
             ]);
             $command->comment($website->domain." Updated");
         }
-        $command->comment("Updated");
+        $command->comment("Done!");
     }
 
     public static function countDupes($command)
     {
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        $sessions = Session::where('created_at', '>', $lastDay);
         $session_info = Session_information::where('created_at', '>', $lastDay);
-        foreach($session_info->get() as $info){
-            Session_information::where("id", $info->id)->update([
-                "countCountries" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("countryName", $info->countryName)->count(),
-                "countCity" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("cityName", $info->cityName)->count(),
-                "countBrowser" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("browser", $info->browser)->count(),
-                "countOs" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("os_title", $info->os_title)->count(),
-                "countDevice" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$info->website_id)->where("device_type", $info->device_type)->count()
-            ]);
-            if($info->countryName == null){
-                Session_information::where("id", $info->id)->update(["countryName" => "Not set"]);
+
+        foreach($sessions->get() as $session){
+            if($session->info != null){
+                Session_information::where("id", $session->info->id)->update([
+                    "countCountries" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$session->website_id)->where("countryName", $session->info->countryName)->count(),
+                    "countCity" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$session->website_id)->where("cityName", $session->info->cityName)->count(),
+                    "countBrowser" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$session->website_id)->where("browser", $session->info->browser)->count(),
+                    "countOs" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$session->website_id)->where("os_title", $session->info->os_title)->count(),
+                    "countDevice" => Session_information::where('created_at', '>', $lastDay)->where("website_id",$session->website_id)->where("device_type", $session->info->device_type)->count()
+                ]);
+                if($session->info->countryName == null){
+                    Session_information::where("id", $session->info->id)->update(["countryName" => "Not set"]);
+                }
+                if($session->info->cityName == null){
+                    Session_information::where("id", $session->info->id)->update(["cityName" => "Not set"]);
+                }
             }
-            if($info->cityName == null){
-                Session_information::where("id", $info->id)->update(["cityName" => "Not set"]);
+            if($session->referrals != null){
+                Referral::where("id", $session->referrals->id)->update([
+                    "count" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("url", $session->referrals->url)->count()
+                ]);
+                if($session->referrals->url == null){
+                    Referral::where("id", $session->referrals->id)->update(["url" => "Not set"]);
+                }
+                if(str_contains($session->referrals->url, "https://".Website::where("id", $session->referrals->website_id)->first()->domain)){
+                    Referral::where("id", $session->referrals->id)->delete();
+                }
+                $search = explode("|",file_get_contents(base_path()."/public_html/search.txt"));
+                $social = explode("|",file_get_contents(base_path()."/public_html/social.txt"));
+                $video = explode("|",file_get_contents(base_path()."/public_html/video.txt"));
+                if(GlobalFunc::contains($session->referrals->url, $search) == true){
+                    Referral::where("id", $session->referrals->id)->update([
+                        "type" => "Search",
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Search")->count()
+                    ]);
+                }  else if(GlobalFunc::contains($session->referrals->url, $social) == true){
+                    Referral::where("id", $session->referrals->id)->update([
+                        "type" => "Social",
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Social")->count()
+                    ]);
+                } else if(GlobalFunc::contains($session->referrals->url, $video) == true){
+                    Referral::where("id", $session->referrals->id)->update([
+                        "type" => "Video",
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Video")->count()
+                    ]);
+                } else {
+                    Referral::where("id", $session->referrals->id)->update([
+                        "type" => "Referral",
+                        "typeCount" => Referral::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("type", "Referral")->count()
+                    ]);
+                }
             }
-            $command->comment("Updated - ".$info->id." Sessions");
-        }
-        $pages = Page::where('created_at', '>', $lastDay);
-        foreach($pages->get() as $page){
-            Page::where("id", $page->id)->update([
-                "count" => Page::where('created_at', '>', $lastDay)->where("website_id", $page->website_id)->where("url", $page->url)->count()
-            ]);
-            if($page->url == null){
-                Page::where("id", $page->id)->update(["url" => "Not set"]);
+            foreach($session->pages()->get() as $page){
+                if($page != null){
+                    Page::where("id", $page->id)->update([
+                        "count" => Page::where('created_at', '>', $lastDay)->where("website_id", $session->website_id)->where("url", $page->url)->count()
+                    ]);
+                    if($page->url == null){
+                        Page::where("id", $page->id)->update(["url" => "Not set"]);
+                    }
+                }
             }
-            $command->comment("Updated - ".$page->id." Pages");
-        }
-        $referrals = Referral::where('created_at', '>', $lastDay);
-        foreach($referrals->get() as $referral){
-            Referral::where("id", $referral->id)->update([
-                "count" => Referral::where('created_at', '>', $lastDay)->where("website_id", $referral->website_id)->where("url", $referral->url)->count()
-            ]);
-            if($referral->url == null){
-                Referral::where("id", $referral->id)->update(["url" => "Not set"]);
-            }
-            if(str_contains($referral->url, "https://".Website::where("id", $referral->website_id)->first()->domain)){
-                Referral::where("id", $referral->id)->delete();
-            }
-            $command->comment("Updated - ".$referral->id." Referrals");
+
+            $command->comment("Updated - ".$session->id." Sessions");
         }
 
         $bots = Bot::where('created_at', '>', $lastDay);

@@ -36,4 +36,12 @@ class GlobalFunc
             return number_format($n, $decimal, $point, $sep);
     }
 
+    public static function contains($value, array $array)
+    {
+        foreach($array as $a) {
+            if (stripos($value,$a) !== false) return true;
+        }
+        return false;
+    }
+
 }

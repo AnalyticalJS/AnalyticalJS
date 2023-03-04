@@ -12,6 +12,7 @@ class Website extends Model
         'domain',
         'dailySessions',
         'dailyReferral',
+        'dailyReferralTypes',
         'dailyPages'
     ];
 
@@ -20,6 +21,7 @@ class Website extends Model
     protected $casts = [
         'dailySessions' => 'array',
         'dailyReferral' => 'array',
+        'dailyReferralTypes' => 'array',
         'dailyPages' => 'array'
     ];
 

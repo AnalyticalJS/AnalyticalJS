@@ -20,6 +20,8 @@ class CreateReferralsTable extends Migration
             $table->integer('pages')->default(1);
             $table->string('url')->nullable();
             $table->integer('count')->nullable()->default(0);
+            $table->string('type')->nullable();
+            $table->integer('typeCount')->nullable()->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

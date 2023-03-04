@@ -18,6 +18,7 @@ class CreateWebsitesTable extends Migration
             $table->string('domain');
             $table->json('dailySessions')->nullable();
             $table->json('dailyReferral')->nullable();
+            $table->json('dailyReferralTypes')->nullable();
             $table->json('dailyPages')->nullable();
             $table->softDeletes();
             $table->timestamps();
