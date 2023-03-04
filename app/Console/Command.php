@@ -82,8 +82,10 @@ class Command
                 if($session->referrals->url == null){
                     Referral::where("id", $session->referrals->id)->update(["url" => "Not set"]);
                 }
-                if(str_contains($session->referrals->url, "https://".Website::where("id", $session->referrals->website_id)->first()->domain)){
-                    Referral::where("id", $session->referrals->id)->delete();
+                if(Website::where("id", $session->referrals->website_id)->count() > 0){
+                    if(str_contains($session->referrals->url, "https://".Website::where("id", $session->referrals->website_id)->first()->domain)){
+                        Referral::where("id", $session->referrals->id)->delete();
+                    }
                 }
                 $search = explode("|",file_get_contents(base_path()."/public_html/search.txt"));
                 $social = explode("|",file_get_contents(base_path()."/public_html/social.txt"));
