@@ -38,7 +38,7 @@ class Command
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
             $referralData = $referrals->unique("url")->take(100)->sortByDesc("count");
-            $referralTypesData = $referrals->unique("type")->sortByDesc("count");
+            $referralTypesData = $referrals->unique("type")->sortByDesc("count")->whereNotNull('type');
             foreach($referralTypesData as $index => $type){
                 $ref = collect(Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->get());
                 if($type->type != null){
