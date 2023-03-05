@@ -70,8 +70,19 @@
         </div>
 
         <script>
+            document.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    goToSite();
+                }
+            });
+            
             function goToSite () {
-                window.location.href = "/site/"+document.getElementById("website").value.replace('https://','').replace('http://','').split('/')[0].toLowerCase();
+                var prod = "{{env("APP_URL_PROD")}}";
+                if(document.getElementById("website").value == ""){
+                    window.location.href = "/site/"+prod.replace('https://','').replace('http://','').split('/')[0].toLowerCase();
+                } else {
+                    window.location.href = "/site/"+document.getElementById("website").value.replace('https://','').replace('http://','').split('/')[0].toLowerCase();
+                }
             }
         </script>
         
