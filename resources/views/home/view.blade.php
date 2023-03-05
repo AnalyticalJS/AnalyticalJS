@@ -77,7 +77,7 @@
             });
             
             function goToSite () {
-                var prod = "{{env("APP_URL_PROD")}}";
+                var prod = "{{env("APP_URL")}}";
                 if(document.getElementById("website").value == ""){
                     window.location.href = "/site/"+prod.replace('https://','').replace('http://','').split('/')[0].toLowerCase();
                 } else {
