@@ -37,7 +37,7 @@ class Command
             }
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
-            $referralData = $referrals->unique("url")->take(100)->sortByDesc("count");
+            $referralData = $referrals->unique("url")->sortByDesc("count");
             $referralTypesData = $referrals->unique("type")->sortByDesc("count")->whereNotNull('type');
             foreach($referralTypesData as $index => $type){
                 $ref = collect(Referral::where('created_at', '>', $lastDay)->where("website_id", $website->id)->where("type", $type->type)->get());
@@ -93,9 +93,6 @@ class Command
                 $search = explode("|",file_get_contents(base_path()."/public_html/search.txt"));
                 $social = explode("|",file_get_contents(base_path()."/public_html/social.txt"));
                 $video = explode("|",file_get_contents(base_path()."/public_html/video.txt"));
-                //$command->comment(print_r($search));
-                $test = GlobalFunc::contains($session->referrals->url, $search);
-                $command->comment("Test ".$test);
                 $searchResult = GlobalFunc::contains($session->referrals->url, $search);
                 $socialResult = GlobalFunc::contains($session->referrals->url, $social);
                 $videoResult = GlobalFunc::contains($session->referrals->url, $video);

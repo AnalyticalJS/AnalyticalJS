@@ -8,13 +8,13 @@
 
             <div class="row">
 
-                <div class="col-9">
+                <div class="col-6">
 
                     <strong>Page URL</strong>
 
                 </div>
 
-                <div class="col-3 text-right">
+                <div class="col-6 text-right">
 
                     <strong>Total {{$pagesData->sum("count")}}</strong>
 

@@ -211,15 +211,6 @@
 
                 </div>
 
-                <div class="row">
-
-                    <div class="col-lg-12 mt-3 mb-3">
-
-                        @include('sites.elements.charts.page')
-
-                    </div>
-
-                </div>
 
                 <div class="row">
 
@@ -233,6 +224,16 @@
                     <div class="col-lg-4 mt-3 mb-3">
 
                         @include('sites.elements.charts.referralType')
+
+                    </div>
+
+                </div>
+                
+                <div class="row">
+
+                    <div class="col-lg-12 mt-3 mb-3">
+
+                        @include('sites.elements.charts.page')
 
                     </div>
 
