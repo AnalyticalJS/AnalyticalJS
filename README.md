@@ -6,7 +6,7 @@ Open source, transparent, simple and free for all website analytics.
 
 Analytical JS aims to be a simple, transparent and open source website statistics that anyone can use for free.
 
-Either download the source or use it at https://analyticaljs.com for free and help make the internet more open and transparent. Just enter your website domain and install Analytical JS.
+Either clone the source or use it at https://analyticaljs.com for free and help make the internet more open and transparent. Just enter your website domain and install Analytical JS.
 
 See the statistics of iDev.Games here:
 https://analyticaljs.com/site/idev.games
