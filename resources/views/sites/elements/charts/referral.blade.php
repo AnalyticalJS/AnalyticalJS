@@ -109,7 +109,7 @@
 
                     <div class="col-6 text-right mt-3">
 
-                        <strong>Total @if($referralData) {{$referralData->where("type", "Referral")->sum("count")}} @else 0 @endif</strong>
+                        <strong>Total @if($referralData) {{$referralData->where("type", "Video")->sum("count")}} @else 0 @endif</strong>
 
                     </div>
 
