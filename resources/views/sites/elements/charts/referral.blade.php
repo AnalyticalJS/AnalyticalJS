@@ -15,7 +15,7 @@
 
                     </div>
 
-                    <div class="col-6 text-right">
+                    <div class="col-6 text-right mt-3">
 
                         <strong>Total {{$referralData->where("type", "Search")->sum("count")}}</strong>
 
@@ -57,7 +57,7 @@
 
                     </div>
 
-                    <div class="col-6 text-right">
+                    <div class="col-6 text-right mt-3">
 
                         <strong>Total {{$referralData->where("type", "Social")->sum("count")}}</strong>
 
@@ -99,7 +99,7 @@
 
                     </div>
 
-                    <div class="col-6 text-right">
+                    <div class="col-6 text-right mt-3">
 
                         <strong>Total {{$referralData->where("type", "Video")->sum("count")}}</strong>
 
@@ -141,7 +141,7 @@
 
                     </div>
 
-                    <div class="col-6 text-right">
+                    <div class="col-6 text-right mt-3">
 
                         <strong>Total {{$referralData->where("type", "Referral")->sum("count")}}</strong>
 
@@ -174,16 +174,6 @@
                 @endif
 
             @endforeach
-
-        </div>
-
-    </div>
-
-    <div class="row">
-
-        <div class="col-md-12 text-right">
-
-            <small class="whiteText">Top 100</small>        
 
         </div>
 

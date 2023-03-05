@@ -7,15 +7,5 @@
         <canvas id="referralType" class="shortChart"></canvas>
 
     </div>
-
-    <div class="row">
-
-        <div class="col-md-12 text-right">
-
-            <small class="whiteText">Top 10</small>        
-
-        </div>
-
-    </div>
-
+    
 </div>
