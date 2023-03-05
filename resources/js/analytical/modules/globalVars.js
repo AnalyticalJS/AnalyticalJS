@@ -27,11 +27,6 @@ async function initDetails(){
         method: "POST",
         body: JSON.stringify({referrer: document.referrer, page: document.URL})
     }).then( (response) => response.json() ).then((responseData) => {
-        userIP = responseData.userIP;
-        referrer = responseData.referrer;
-        referrerDomain = responseData.referrerDomain;
-        failed = responseData.failed;
-        id = responseData.id;
     });
     return theResponse;
 }
