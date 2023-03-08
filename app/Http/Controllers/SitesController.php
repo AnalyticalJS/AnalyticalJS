@@ -26,6 +26,7 @@ class SitesController extends Controller
         $website = Website::where("domain",$domain);
         if($website->count() > 0){
             $theWebsite = $website->first();
+            dd(Cache::get($theWebsite->id.'dailySessions'));
             $days = Cache::get($theWebsite->id.'dailySessions');
             $pagesData = Cache::get($theWebsite->id.'dailyPages');
             $referralData = Cache::get($theWebsite->id.'dailyReferral');

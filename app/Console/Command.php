@@ -53,11 +53,11 @@ class Command
                 "dailyReferralTypes" => $referralTypesData->values(),
                 "dailyPages" => $pagesData->values()
             ]);*/
-            $dailySessions = Cache::put($website->id.'dailySessions', $days, 600);
-            $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values(), 600);
-            $dailyReferralTypes = Cache::put($website->id.'dailyReferralTypes', $referralTypesData->values(), 600);
-            $dailyPages = Cache::put($website->id.'dailyPages', collect($pagesData->values()), 600);
-            $sessionInfo = Cache::put($website->id.'sessionInfo', collect($session_info)->values(), 600);
+            $dailySessions = Cache::add($website->id.'dailySessions', $days, 600);
+            $dailyReferral = Cache::add($website->id.'dailyReferral', $referralData->values(), 600);
+            $dailyReferralTypes = Cache::add($website->id.'dailyReferralTypes', $referralTypesData->values(), 600);
+            $dailyPages = Cache::add($website->id.'dailyPages', collect($pagesData->values()), 600);
+            $sessionInfo = Cache::add($website->id.'sessionInfo', collect($session_info)->values(), 600);
             $command->comment($website->domain." Updated");
         }
         $command->comment("Done!");
