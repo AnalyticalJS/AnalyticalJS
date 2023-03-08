@@ -13,4 +13,5 @@ https://yandex.|
 https://www.ecosia.|
 https://ecosia.|
 https://www.ask.|
-https://ask.
+https://ask.|
+search.brave.

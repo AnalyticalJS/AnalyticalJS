@@ -6,6 +6,7 @@ use Request;
 use Carbon\Carbon;
 use App\Models\Website;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 
 class SitesController extends Controller
 {
@@ -24,31 +25,30 @@ class SitesController extends Controller
     {
         $website = Website::where("domain",$domain);
         if($website->count() > 0){
-            $days = [];
-            $pagesData = [];
-            $referralData = [];
-            $referralTypeData = [];
+            $theWebsite = $website->first();
+            $days = Cache::get($theWebsite->id.'dailySessions');
+            $pagesData = Cache::get($theWebsite->id.'dailyReferral');
+            $referralData = Cache::get($theWebsite->id.'dailyReferralTypes');
+            $referralTypeData = Cache::get($theWebsite->id.'dailyPages');
+            $sessionInfo = Cache::get($theWebsite->id.'sessionInfo');
 
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
-            $theWebsite = $website->first();
-            $theSessions = $theWebsite->sessions->where('created_at', '>', $lastDay);
-            $session_info = $theWebsite->session_info->where('created_at', '>', $lastDay);
-            $realtime = $theSessions->where('updated_at', '>', $mins);
+            $realtime = $theWebsite->sessions->where('updated_at', '>', $mins);
            
             if($theWebsite->dailySessions != null){
-                $days = $theWebsite->dailySessions;
+                //$days = $theWebsite->dailySessions;
             }
             if($theWebsite->dailyPages != null){
-                $pagesData = collect($theWebsite->dailyPages);
+                $pagesData = collect($pagesData);
             }
             if($theWebsite->dailyReferral != null){
-                $referralData = collect($theWebsite->dailyReferral);
+                $referralData = collect($referralData);
             }
             if($theWebsite->dailyReferralTypes != null){
-                $referralTypeData = $theWebsite->dailyReferralTypes;
+                //$referralTypeData = $theWebsite->dailyReferralTypes;
             }
-            $sessionInfo = collect($session_info)->values();
+            //$sessionInfo = collect($session_info)->values();
 
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))

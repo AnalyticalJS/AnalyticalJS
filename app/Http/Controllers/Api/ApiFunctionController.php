@@ -38,7 +38,7 @@ class ApiFunctionController
             $Browser = new BrowserDetection;
             $browserInfo = $Browser->getAll($useragent);
 
-            if(str_contains($ip, "192.168") || str_contains($ip, "127.0") || env("APP_ENV") == "Production") {
+            if((str_contains($ip, "192.168") || str_contains($ip, "127.0")) && env("APP_ENV") == "Production") {
                 $failed = true;
                 return [
                     "id" => "error",

@@ -10,6 +10,7 @@ use App\Models\Website;
 use App\Models\Session;
 use App\Models\Session_information;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 
 class Command
@@ -35,6 +36,7 @@ class Command
                     "bots" => $theBots
                 ]);
             }
+            $session_info = $website->session_info->where('created_at', '>', $lastDay);
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
             $referralData = $referrals->unique("url")->sortByDesc("count");
@@ -45,12 +47,17 @@ class Command
                     $type->typeCount = $ref->sortByDesc("count")->count();
                 }
             }
-            $website->update([
+            /*$website->update([
                 "dailySessions" => $days,
                 "dailyReferral" => $referralData->values(),
                 "dailyReferralTypes" => $referralTypesData->values(),
                 "dailyPages" => $pagesData->values()
-            ]);
+            ]);*/
+            $dailySessions = Cache::put($website->id.'dailySessions', $days, 600);
+            $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values(), 600);
+            $dailyReferralTypes = Cache::put($website->id.'dailyReferralTypes', $referralTypesData->values(), 600);
+            $dailyPages = Cache::put($website->id.'dailyPages', $pagesData->values(), 600);
+            $sessionInfo = Cache::put($website->id.'sessionInfo', collect($session_info)->values(), 600);
             $command->comment($website->domain." Updated");
         }
         $command->comment("Done!");
