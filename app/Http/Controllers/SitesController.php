@@ -27,9 +27,9 @@ class SitesController extends Controller
         if($website->count() > 0){
             $theWebsite = $website->first();
             $days = Cache::get($theWebsite->id.'dailySessions');
-            $pagesData = Cache::get($theWebsite->id.'dailyReferral');
-            $referralData = Cache::get($theWebsite->id.'dailyReferralTypes');
-            $referralTypeData = Cache::get($theWebsite->id.'dailyPages');
+            $pagesData = Cache::get($theWebsite->id.'dailyPages');
+            $referralData = Cache::get($theWebsite->id.'dailyReferral');
+            $referralTypeData = Cache::get($theWebsite->id.'dailyReferralTypes');
             $sessionInfo = Cache::get($theWebsite->id.'sessionInfo');
 
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
@@ -40,7 +40,7 @@ class SitesController extends Controller
                 //$days = $theWebsite->dailySessions;
             }
             if($theWebsite->dailyPages != null){
-                $pagesData = collect($pagesData);
+                $pagesData = $pagesData;
             }
             if($theWebsite->dailyReferral != null){
                 $referralData = collect($referralData);

@@ -56,7 +56,7 @@ class Command
             $dailySessions = Cache::put($website->id.'dailySessions', $days, 600);
             $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values(), 600);
             $dailyReferralTypes = Cache::put($website->id.'dailyReferralTypes', $referralTypesData->values(), 600);
-            $dailyPages = Cache::put($website->id.'dailyPages', $pagesData->values(), 600);
+            $dailyPages = Cache::put($website->id.'dailyPages', collect($pagesData->values()), 600);
             $sessionInfo = Cache::put($website->id.'sessionInfo', collect($session_info)->values(), 600);
             $command->comment($website->domain." Updated");
         }
