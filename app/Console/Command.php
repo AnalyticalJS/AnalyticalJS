@@ -53,11 +53,31 @@ class Command
                 "dailyReferralTypes" => $referralTypesData->values(),
                 "dailyPages" => $pagesData->values()
             ]);*/
-            $dailySessions = Cache::forever($website->id.'dailySessions', $days);
-            $dailyReferral = Cache::forever($website->id.'dailyReferral', $referralData->values());
-            $dailyReferralTypes = Cache::forever($website->id.'dailyReferralTypes', $referralTypesData->values());
-            $dailyPages = Cache::forever($website->id.'dailyPages', collect($pagesData->values()));
-            $sessionInfo = Cache::forever($website->id.'sessionInfo', collect($session_info)->values());
+            if (Cache::has($website->id.'dailySessions')) {
+                $dailySessions = Cache::put($website->id.'dailySessions', $days);
+            } else {
+                $dailySessions = Cache::forever($website->id.'dailySessions', $days);
+            }
+            if (Cache::has($website->id.'dailyReferral')) {
+                $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values());
+            } else {
+                $dailyReferral = Cache::forever($website->id.'dailyReferral', $referralData->values());
+            }
+            if (Cache::has($website->id.'dailyReferralTypes')) {
+                $dailyReferralTypes = Cache::put($website->id.'dailyReferralTypes', $referralTypesData->values());
+            } else {
+                $dailyReferralTypes = Cache::forever($website->id.'dailyReferralTypes', $referralTypesData->values());
+            }
+            if (Cache::has($website->id.'dailyPages')) {
+                $dailyPages = Cache::put($website->id.'dailyPages', collect($pagesData->values()));
+            } else {
+                $dailyPages = Cache::forever($website->id.'dailyPages', collect($pagesData->values()));
+            }
+            if (Cache::has($website->id.'sessionInfo')) {
+                $sessionInfo = Cache::put($website->id.'sessionInfo', collect($session_info)->values());
+            } else {
+                $sessionInfo = Cache::forever($website->id.'sessionInfo', collect($session_info)->values());
+            }
             $command->comment($website->domain." Updated");
         }
         $command->comment("Done!");
