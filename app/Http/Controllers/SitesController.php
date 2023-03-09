@@ -31,24 +31,23 @@ class SitesController extends Controller
             $referralData = Cache::get($theWebsite->id.'dailyReferral');
             $referralTypeData = Cache::get($theWebsite->id.'dailyReferralTypes');
             $sessionInfo = Cache::get($theWebsite->id.'sessionInfo');
-
+            
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
             $realtime = $theWebsite->sessions->where('updated_at', '>', $mins);
-           
-            if($theWebsite->dailySessions != null){
-                //$days = $theWebsite->dailySessions;
+            
+            if($sessionInfo == null){
+                $sessionInfo = collect([]);
             }
-            if($theWebsite->dailyPages != null){
-                $pagesData = $pagesData;
+            if($days == null){
+                $days = [];
             }
-            if($theWebsite->dailyReferral != null){
+            if($pagesData == null){
+                $pagesData = [];
+            }
+            if($referralData != null){
                 $referralData = collect($referralData);
             }
-            if($theWebsite->dailyReferralTypes != null){
-                //$referralTypeData = $theWebsite->dailyReferralTypes;
-            }
-            //$sessionInfo = collect($session_info)->values();
 
             return view('sites.view')->with("website", $website->first())
                                      ->with("daily", array_reverse($days))
