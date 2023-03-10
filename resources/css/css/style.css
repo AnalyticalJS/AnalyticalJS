@@ -251,6 +251,23 @@ a.underlined:hover:after{
     height:100%;
 }
 
+.record{
+    transform:translateY(-20px);
+    width:10px;
+    height:10px;
+    background-color:#f55442;
+    border-radius:50%;
+    display:inline-block;
+    animation:blinkRecord 3s infinite;
+}
+
+@keyframes blinkRecord {
+    0% {opacity: 1;}
+    10% {opacity: 1;}
+    30% {opacity: 0;}
+    50% {opacity: 1;}
+  }
+
 .users{
     margin: auto!important;
     display: flex;

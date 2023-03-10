@@ -1,5 +1,5 @@
 import Chart from 'chart.js/auto';
-new Chart(document.getElementById('daily'),
+chart = new Chart(document.getElementById('daily'),
     {
     type: 'line',
     data: {

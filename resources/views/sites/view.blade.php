@@ -254,12 +254,14 @@
     </body>
 
     <script>
-            const sessionData = @json($sessionInfo);
-            const referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
-            const botData = sortBy(getUniqueListBy(@json($botData),'bot'), "count").slice(0,10);
-            const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
-            const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
-            const deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
+            var chart;
+            var data = @json($daily);
+            var sessionData = @json($sessionInfo);
+            var referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
+            var botData = sortBy(getUniqueListBy(@json($botData),'bot'), "count").slice(0,10);
+            var browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
+            var operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
+            var deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
 
             function getUniqueListBy(arr, key) {
                 return [...new Map(arr.map(item => [item[key], item])).values()]
@@ -270,8 +272,27 @@
                     return a[by] - b[by];
                 }).reverse();
             }
+
     </script>
 
-    <script src="{{ mix('js/chart.js') }}" defer></script>
+    <script src="{{ mix('js/chart.js') }}"></script>
 
+    <script>
+            realtime = setInterval(function() { 
+                fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
+            }, 5000);
+            function updateRealtime(udata){
+                document.getElementById("sessions").innerHTML = udata[0][0];
+                document.getElementById("pages").innerHTML = udata[0][1];
+                document.getElementById("sessionsCount").innerHTML = udata[0][2];
+                document.getElementById("pagesCount").innerHTML = udata[0][3];
+                document.getElementById("countriesCount").innerHTML = udata[0][4];
+                document.getElementById("citiesCount").innerHTML = udata[0][5];
+                document.getElementById("browserCount").innerHTML = udata[0][6];
+                document.getElementById("devicesCount").innerHTML = udata[0][7];
+                document.getElementById("osCount").innerHTML = udata[0][8];
+                document.getElementById("referralsCount").innerHTML = udata[0][9];
+            }
+    </script>
 </html>
+

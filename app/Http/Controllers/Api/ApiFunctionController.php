@@ -13,6 +13,7 @@ use App\Models\Session;
 use App\Models\Referral;
 use App\Models\Session_information;
 use foroco\BrowserDetection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Stevebauman\Location\Facades\Location;
 
@@ -152,5 +153,31 @@ class ApiFunctionController
                 "failed" => true
                 ];
         }
+    }
+
+    public function realtime($id)
+    {
+        $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
+        $sessions = GlobalFunc::getCache($id.'Sessions');
+        $sessionInfo = GlobalFunc::getCache($id.'sessionInfo');
+        /*$days = GlobalFunc::getCache($id.'dailySessions');
+        $botData = GlobalFunc::getCache($id.'botData');
+        $pagesData = GlobalFunc::getCache($id.'dailyPages');
+        $referralTypeData = GlobalFunc::getCache($id.'dailyReferralTypes');*/
+        $referralData = GlobalFunc::getCache($id.'dailyReferral');
+        $minsAgo = collect($sessions)->where('updated_at', '>', $mins);
+        $realtime = [
+                GlobalFunc::count_format2($minsAgo->count()),
+                GlobalFunc::count_format2($minsAgo->sum("pages")),
+                GlobalFunc::count_format2($sessions->count()),
+                GlobalFunc::count_format2($sessions->sum("pages")),
+                GlobalFunc::count_format2($sessionInfo->unique("countryName")->count()),
+                GlobalFunc::count_format2($sessionInfo->unique("cityName")->count()),
+                GlobalFunc::count_format2($sessionInfo->unique("browser")->count()),
+                GlobalFunc::count_format2($sessionInfo->unique("device_type")->count()),
+                GlobalFunc::count_format2($sessionInfo->unique("device_title")->count()),
+                GlobalFunc::count_format2($referralData->sum("count"))
+            ];
+        return [$realtime];
     }
 }

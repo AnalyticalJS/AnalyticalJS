@@ -4,10 +4,6 @@
                 
     <div class="panelInner">
 
-        <script>
-            const data = @json($daily);
-        </script>
-
         <canvas id="daily" class="chart"></canvas>
 
     </div>

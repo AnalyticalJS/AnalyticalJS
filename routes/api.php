@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 // Get Init Details
 Route::post('/initDetails/', [App\Http\Controllers\Api\ApiFunctionController::class, 'initDetails'])->name('initDetails');
+Route::get('/realtime/{id}', [App\Http\Controllers\Api\ApiFunctionController::class, 'realtime'])->name('realtime');
