@@ -242,6 +242,11 @@ a.underlined:hover:after{
     font-weight:bold;
 }
 
+.mediumNumber{
+    font-size:42px;
+    font-weight:bold;
+}
+
 .height100{
     height:100%;
 }

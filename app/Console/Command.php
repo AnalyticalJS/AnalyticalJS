@@ -21,6 +21,9 @@ class Command
             $days = array();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
             $theSessions = $website->sessions->where('created_at', '>', $lastDay);
+            if($theSessions->count() > 0){
+                GlobalFunc::saveCache($website->id.'Sessions', $theSessions);
+            }
             for ($i = 0; $i < 24; $i++) {
                 $hour = Carbon::now()->subHours($i)->startOfHour()->toDateTimeString();
                 $hourDisplay = Carbon::now()->subHours($i)->startOfHour()->toTimeString();

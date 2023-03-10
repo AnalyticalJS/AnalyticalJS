@@ -37,9 +37,6 @@ class SitesController extends Controller
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
             $sessions = GlobalFunc::getCache($theWebsite->id.'Sessions');
             $realtime = collect($sessions)->where('updated_at', '>', $mins);
-
-            //GlobalFunc::pruneCache($theWebsite->id.'Sessions');
-            //dd(GlobalFunc::getCache($theWebsite->id.'Sessions'));
             
             if($sessionInfo == null){
                 $sessionInfo = collect([]);
