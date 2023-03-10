@@ -35,7 +35,8 @@ class SitesController extends Controller
             $referralTypeData = GlobalFunc::getCache($theWebsite->id.'dailyReferralTypes');
             $sessionInfo = GlobalFunc::getCache($theWebsite->id.'sessionInfo');
             $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
-            $realtime = collect(GlobalFunc::getCache($theWebsite->id.'Sessions'))->where('updated_at', '>', $mins);
+            $sessions = GlobalFunc::getCache($theWebsite->id.'Sessions');
+            $realtime = collect($sessions)->where('updated_at', '>', $mins);
 
             //GlobalFunc::pruneCache($theWebsite->id.'Sessions');
             //dd(GlobalFunc::getCache($theWebsite->id.'Sessions'));
@@ -66,6 +67,7 @@ class SitesController extends Controller
                                      ->with("pagesData", $pagesData)
                                      ->with("referralData", $referralData)
                                      ->with("referralTypeData", $referralTypeData)
+                                     ->with("sessions", $sessions)
                                      ->with("sessionInfo", $sessionInfo);
         } else {
             return view('sites.notfound')->with("domain", $domain);

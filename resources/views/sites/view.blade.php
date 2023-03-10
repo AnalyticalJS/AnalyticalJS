@@ -74,6 +74,31 @@
 
                         <div class="codeSnippet">
 
+                            <h2 class="gradientText">Overall Statistics</h2>
+                            <p>Statistics for pages, sessions and countries over the past <span class="underlined">24 hours</span>.</p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-12 mt-12 mb-3">
+                
+                        @include('sites.elements.charts.stat')
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-12 mt-3 mb-3">
+
+                        <div class="codeSnippet">
+
                             <h2 class="gradientText">Location Statistics</h2>
                             <p>Location statistics of users who accessed this website in the past <span class="underlined">24 hours</span>.</p>
 
