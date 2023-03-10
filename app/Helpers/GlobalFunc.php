@@ -1,8 +1,10 @@
 <?php
 namespace App\Helpers;
 
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class GlobalFunc
 {
@@ -44,6 +46,37 @@ class GlobalFunc
             }
         }
         return false;
+    }
+
+    public static function saveCache($key, $value)
+    {
+        if (Cache::has($key)) {
+            return Cache::put($key, $value);
+        } else {
+            return Cache::forever($key, $value);
+        }
+    }
+
+    public static function getCache($key)
+    {
+        return Cache::get($key);
+    }
+
+    public static function pruneCache($key, $period = 24)
+    {
+        $lastDay = Carbon::now()->subHours($period)->startOfHour()->toDateTimeString();
+        $results = Cache::get($key);
+    }
+    
+    public static function addRowCache($key, $value)
+    {
+        if (Cache::has($key)) {
+            $results = Cache::get($key);
+        } else {
+            $results = [];
+        }
+        $result = array_merge($results, [$value]);
+        GlobalFunc::saveCache($key, $result);
     }
 
 }

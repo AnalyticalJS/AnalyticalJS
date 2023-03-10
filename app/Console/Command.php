@@ -10,7 +10,6 @@ use App\Models\Website;
 use App\Models\Session;
 use App\Models\Session_information;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 
 class Command
@@ -48,36 +47,12 @@ class Command
                     $type->typeCount = $ref->sortByDesc("count")->count();
                 }
             }
-            if (Cache::has($website->id.'dailySessions')) {
-                $dailySessions = Cache::put($website->id.'dailySessions', $days);
-            } else {
-                $dailySessions = Cache::forever($website->id.'dailySessions', $days);
-            }
-            if (Cache::has($website->id.'botData')) {
-                $botData = Cache::put($website->id.'botData', $botdata);
-            } else {
-                $botData = Cache::forever($website->id.'botData', $botdata);
-            }
-            if (Cache::has($website->id.'dailyReferral')) {
-                $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values());
-            } else {
-                $dailyReferral = Cache::forever($website->id.'dailyReferral', $referralData->values());
-            }
-            if (Cache::has($website->id.'dailyReferralTypes')) {
-                $dailyReferralTypes = Cache::put($website->id.'dailyReferralTypes', $referralTypesData->values());
-            } else {
-                $dailyReferralTypes = Cache::forever($website->id.'dailyReferralTypes', $referralTypesData->values());
-            }
-            if (Cache::has($website->id.'dailyPages')) {
-                $dailyPages = Cache::put($website->id.'dailyPages', collect($pagesData->values()));
-            } else {
-                $dailyPages = Cache::forever($website->id.'dailyPages', collect($pagesData->values()));
-            }
-            if (Cache::has($website->id.'sessionInfo')) {
-                $sessionInfo = Cache::put($website->id.'sessionInfo', collect($session_info)->values());
-            } else {
-                $sessionInfo = Cache::forever($website->id.'sessionInfo', collect($session_info)->values());
-            }
+            $dailySessions = GlobalFunc::saveCache($website->id.'dailySessions', $days);
+            $botData = GlobalFunc::saveCache($website->id.'botData', $botdata);
+            $dailyReferral = GlobalFunc::saveCache($website->id.'dailyReferral', $referralData->values());
+            $dailyReferralTypes = GlobalFunc::saveCache($website->id.'dailyReferralTypes', $referralTypesData->values());
+            $dailyPages = GlobalFunc::saveCache($website->id.'dailyPages', collect($pagesData->values()));
+            $sessionInfo = GlobalFunc::saveCache($website->id.'sessionInfo', collect($session_info)->values());
             $command->comment($website->domain." Updated");
         }
         $command->comment("Done!");

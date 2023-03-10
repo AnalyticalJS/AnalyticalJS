@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Request;
+use GlobalFunc;
 use Carbon\Carbon;
 use App\Models\Website;
 use App\Models\Session;
@@ -27,15 +28,16 @@ class SitesController extends Controller
         $website = Website::where("domain",$domain)->select('domain','id');
         if($website->count() > 0){
             $theWebsite = $website->first();
-            $days = Cache::get($theWebsite->id.'dailySessions');
-            $botData = Cache::get($theWebsite->id.'botData');
-            $pagesData = Cache::get($theWebsite->id.'dailyPages');
-            $referralData = Cache::get($theWebsite->id.'dailyReferral');
-            $referralTypeData = Cache::get($theWebsite->id.'dailyReferralTypes');
-            $sessionInfo = Cache::get($theWebsite->id.'sessionInfo');
-            
-            $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
-            $realtime = Session::where('website_id', $theWebsite->id)->where('updated_at', '>', $mins);
+            $days = GlobalFunc::getCache($theWebsite->id.'dailySessions');
+            $botData = GlobalFunc::getCache($theWebsite->id.'botData');
+            $pagesData = GlobalFunc::getCache($theWebsite->id.'dailyPages');
+            $referralData = GlobalFunc::getCache($theWebsite->id.'dailyReferral');
+            $referralTypeData = GlobalFunc::getCache($theWebsite->id.'dailyReferralTypes');
+            $sessionInfo = GlobalFunc::getCache($theWebsite->id.'sessionInfo');
+            $realtime = GlobalFunc::getCache($theWebsite->id.'Sessions');
+
+            //GlobalFunc::pruneCache($theWebsite->id.'Sessions');
+            //dd(GlobalFunc::getCache($theWebsite->id.'Sessions'));
             
             if($sessionInfo == null){
                 $sessionInfo = collect([]);
@@ -49,11 +51,14 @@ class SitesController extends Controller
             if($pagesData == null){
                 $pagesData = [];
             }
+            if($realtime == null){
+                $realtime = collect([]);
+            }
             if($referralData != null){
                 $referralData = collect($referralData);
             }
             
-            return view('sites.view')->with("website", $website->first())
+            return view('sites.view')->with("website", $theWebsite)
                                      ->with("daily", array_reverse($days))
                                      ->with("realtime", $realtime)
                                      ->with("botData", $botData)
