@@ -1,11 +1,11 @@
 https://www.google.|
 https://google.|
 https://www.bing.|
-https://bing.|
+.bing.|
 https://www.duckduckgo.|
 https://duckduckgo.|
 https://www.yahoo.|
-https://yahoo.|
+search.yahoo.|
 https://www.baidu.|
 https://baidu.|
 https://www.yandex.|
