@@ -36,6 +36,7 @@ class Command
                     "bots" => $theBots
                 ]);
             }
+            $botdata = Bot::where('website_id',$website->id)->where('created_at', '>', $lastDay)->get();
             $session_info = $website->session_info->where('created_at', '>', $lastDay);
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
             $referrals = collect($website->referrals->where('created_at', '>', $lastDay));
@@ -47,16 +48,15 @@ class Command
                     $type->typeCount = $ref->sortByDesc("count")->count();
                 }
             }
-            /*$website->update([
-                "dailySessions" => $days,
-                "dailyReferral" => $referralData->values(),
-                "dailyReferralTypes" => $referralTypesData->values(),
-                "dailyPages" => $pagesData->values()
-            ]);*/
             if (Cache::has($website->id.'dailySessions')) {
                 $dailySessions = Cache::put($website->id.'dailySessions', $days);
             } else {
                 $dailySessions = Cache::forever($website->id.'dailySessions', $days);
+            }
+            if (Cache::has($website->id.'botData')) {
+                $botData = Cache::put($website->id.'botData', $botdata);
+            } else {
+                $botData = Cache::forever($website->id.'botData', $botdata);
             }
             if (Cache::has($website->id.'dailyReferral')) {
                 $dailyReferral = Cache::put($website->id.'dailyReferral', $referralData->values());

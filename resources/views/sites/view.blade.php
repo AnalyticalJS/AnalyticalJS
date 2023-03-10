@@ -24,25 +24,6 @@
 
     </head>
     <body>
-
-        <script>
-            const sessionData = @json($sessionInfo);
-            const referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
-            const botData = sortBy(getUniqueListBy(@json($website->bots),'bot'), "count").slice(0,10);
-            const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
-            const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
-            const deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
-
-            function getUniqueListBy(arr, key) {
-                return [...new Map(arr.map(item => [item[key], item])).values()]
-            }
-            function sortBy(array, by){
-                var byDate = array.slice(0);
-                return byDate.sort(function(a,b) {
-                    return a[by] - b[by];
-                }).reverse();
-            }
-        </script>
        
         <div class="hero-head">
 
@@ -246,6 +227,25 @@
         </div>
 
     </body>
+
+    <script>
+            const sessionData = @json($sessionInfo);
+            const referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
+            const botData = sortBy(getUniqueListBy(@json($botData),'bot'), "count").slice(0,10);
+            const browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
+            const operatingData = sortBy(getUniqueListBy(sessionData,'os_title'), "countOs").slice(0,10);
+            const deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
+
+            function getUniqueListBy(arr, key) {
+                return [...new Map(arr.map(item => [item[key], item])).values()]
+            }
+            function sortBy(array, by){
+                var byDate = array.slice(0);
+                return byDate.sort(function(a,b) {
+                    return a[by] - b[by];
+                }).reverse();
+            }
+    </script>
 
     <script src="{{ mix('js/chart.js') }}" defer></script>
 
