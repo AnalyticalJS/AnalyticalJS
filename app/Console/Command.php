@@ -20,7 +20,7 @@ class Command
         foreach($websites as $website){
             $days = array();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
-            $theSessions = $website->sessions->where('created_at', '>', $lastDay);
+            $theSessions = $website->sessions->where('updated_at', '>', $lastDay);
             if($theSessions->count() > 0){
                 GlobalFunc::saveCache($website->id.'Sessions', $theSessions);
             }
@@ -64,7 +64,7 @@ class Command
     public static function countDupes($command)
     {
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
-        $sessions = Session::where('created_at', '>', $lastDay);
+        $sessions = Session::where('updated_at', '>', $lastDay);
         $session_info = Session_information::where('created_at', '>', $lastDay);
 
         foreach($sessions->get() as $session){

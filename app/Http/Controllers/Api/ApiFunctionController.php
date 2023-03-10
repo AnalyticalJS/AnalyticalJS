@@ -160,8 +160,8 @@ class ApiFunctionController
         $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
         $sessions = GlobalFunc::getCache($id.'Sessions');
         $sessionInfo = GlobalFunc::getCache($id.'sessionInfo');
-        /*$days = GlobalFunc::getCache($id.'dailySessions');
-        $botData = GlobalFunc::getCache($id.'botData');
+        $days = GlobalFunc::getCache($id.'dailySessions');
+        /*$botData = GlobalFunc::getCache($id.'botData');
         $pagesData = GlobalFunc::getCache($id.'dailyPages');
         $referralTypeData = GlobalFunc::getCache($id.'dailyReferralTypes');*/
         $referralData = GlobalFunc::getCache($id.'dailyReferral');
@@ -178,6 +178,6 @@ class ApiFunctionController
                 GlobalFunc::count_format2($sessionInfo->unique("device_title")->count()),
                 GlobalFunc::count_format2($referralData->sum("count"))
             ];
-        return [$realtime];
+        return [$realtime,$days];
     }
 }

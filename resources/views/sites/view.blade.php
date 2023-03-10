@@ -282,6 +282,7 @@
                 fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
             }, 5000);
             function updateRealtime(udata){
+                udata[1].reverse();
                 document.getElementById("sessions").innerHTML = udata[0][0];
                 document.getElementById("pages").innerHTML = udata[0][1];
                 document.getElementById("sessionsCount").innerHTML = udata[0][2];
@@ -292,6 +293,21 @@
                 document.getElementById("devicesCount").innerHTML = udata[0][7];
                 document.getElementById("osCount").innerHTML = udata[0][8];
                 document.getElementById("referralsCount").innerHTML = udata[0][9];
+                chart.data.datasets.forEach(function(dataset, index) {
+                    if(index == 0){
+                        dataset.data = loopDaily(udata, "pages");
+                    } else {
+                        dataset.data = loopDaily(udata, "sessions");
+                    }
+                });
+                chart.update();
+            }
+            function loopDaily(d,t){
+                var result = [];
+                for (let i = 0; i < 24; i++) {
+                    result[i] = d[1][i][t];
+                }
+                return result;
             }
     </script>
 </html>

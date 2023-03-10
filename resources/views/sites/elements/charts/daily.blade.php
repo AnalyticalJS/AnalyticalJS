@@ -1,6 +1,6 @@
 <div class="panel height100">
 
-    <h2 class="panelHeader">Today</h2>
+    <h2 class="panelHeader">Today <span class="record"></span></h2>
                 
     <div class="panelInner">
 
