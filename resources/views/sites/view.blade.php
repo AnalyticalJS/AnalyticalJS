@@ -293,6 +293,7 @@
                 document.getElementById("devicesCount").innerHTML = udata[0][7];
                 document.getElementById("osCount").innerHTML = udata[0][8];
                 document.getElementById("referralsCount").innerHTML = udata[0][9];
+                chart.data.labels = loopDaily(udata, "hour");
                 chart.data.datasets.forEach(function(dataset, index) {
                     if(index == 0){
                         dataset.data = loopDaily(udata, "pages");
