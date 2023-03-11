@@ -11,6 +11,8 @@ Either clone the source or use it at https://analyticaljs.com for free and help 
 See the statistics of iDev.Games here:
 https://analyticaljs.com/site/idev.games
 
+Analytical JS is built upon the Laravel framework. 
+
 ## How to Install
 
 First clone the project into your local environment. You will need to point your development domain towards the public_html folder within the cloned repository folder:
@@ -46,6 +48,13 @@ npm install
 ```
 
 
+Then migrate the database tables:
+
+```
+php artisan migrate
+```
+
+
 After this you can either use:
 
 ```
@@ -68,3 +77,12 @@ npm run production
 
 You'll build the asset files with the APP_URL_PROD environment variable. Which should be your production URL. So this should always be run before pushing up.
 
+
+Analytical JS processes data in the background, for this to happen. You'll need to set up a cron job like the below (Instead changing the path to your project folder):
+
+```
+*	*	*	*	*	cd /home/usr/code/AnalyticalJS/ && /usr/local/bin/php artisan schedule:run >> /dev/null 2>&1
+```
+
+
+When the stats are processed they are then saved into cache for fast loading when viewing the stats. By default the cache is set to "file" in your .env file. For a few stats of development testing this is fine. I recommend setting up either memcached or redis for in memeory cache which are far more capable.

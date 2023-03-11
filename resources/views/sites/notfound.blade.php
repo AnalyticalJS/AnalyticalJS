@@ -7,7 +7,9 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Web Analytics for {!! $domain !!} - {{ config('app.name', 'Laravel') }}</title>
+        <title>Web Analytics for {!! $domain !!} - {{ config('app.name', 'Laravel') }} 📊</title>
+
+        <meta name="description" content="This site doesn't currently record their statistics uing Analytical.js">
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>

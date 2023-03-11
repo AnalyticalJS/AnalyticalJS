@@ -84,7 +84,7 @@
 
             <div class="panelInner mt-3 mb-3 pb-3 pt-3">
 
-                <div class="mediumNumber gradientText" id="osCount">{{GlobalFunc::count_format2($sessionInfo->unique("device_title")->count())}}</div>
+                <div class="mediumNumber gradientText" id="osCount">{{GlobalFunc::count_format2($sessionInfo->unique("os_title")->count())}}</div>
 
                 <small>OS used in the last 24 hours</small>
 

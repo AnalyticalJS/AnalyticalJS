@@ -1,5 +1,5 @@
 import Chart from 'chart.js/auto';
-new Chart(document.getElementById('crawler'),
+chart2 = new Chart(document.getElementById('crawler'),
     {
     type: 'line',
     data: {

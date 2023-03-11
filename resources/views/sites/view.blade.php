@@ -7,7 +7,9 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Web Analytics for {!! $website->domain !!} - {{ config('app.name', 'Laravel') }}</title>
+        <title>Web Analytics for {!! $website->domain !!} - {{ config('app.name', 'Laravel') }} 📊</title>
+
+        <meta name="description" content="View the statistics for {{ $website->domain }} on Analytical.js ✔️">
 
         <!-- Scripts -->
         <script src="{{ mix('js/app.js') }}" defer></script>
@@ -255,6 +257,7 @@
 
     <script>
             var chart;
+            var chart2;
             var data = @json($daily);
             var sessionData = @json($sessionInfo);
             var referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
@@ -280,9 +283,10 @@
     <script>
             realtime = setInterval(function() { 
                 fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
-            }, 5000);
+            }, 15000);
             function updateRealtime(udata){
                 udata[1].reverse();
+                udata[2].reverse();
                 document.getElementById("sessions").innerHTML = udata[0][0];
                 document.getElementById("pages").innerHTML = udata[0][1];
                 document.getElementById("sessionsCount").innerHTML = udata[0][2];
@@ -293,20 +297,29 @@
                 document.getElementById("devicesCount").innerHTML = udata[0][7];
                 document.getElementById("osCount").innerHTML = udata[0][8];
                 document.getElementById("referralsCount").innerHTML = udata[0][9];
-                chart.data.labels = loopDaily(udata, "hour");
-                chart.data.datasets.forEach(function(dataset, index) {
-                    if(index == 0){
-                        dataset.data = loopDaily(udata, "pages");
-                    } else {
-                        dataset.data = loopDaily(udata, "sessions");
-                    }
-                });
-                chart.update();
+                if(udata[1].length > 0){
+                    chart.data.labels = loopDaily(udata, "hour", 1);
+                    chart.data.datasets.forEach(function(dataset, index) {
+                        if(index == 0){
+                            dataset.data = loopDaily(udata, "pages", 1);
+                        } else {
+                            dataset.data = loopDaily(udata, "sessions", 1);
+                        }
+                    });
+                    chart.update();
+                }
+                if(udata[2].length > 0){
+                    chart2.data.labels = loopDaily(udata, "hour", 2);
+                    chart2.data.datasets.forEach(function(dataset, index) {
+                        dataset.data = loopDaily(udata, "pages", 2);
+                    });
+                    chart2.update();
+                }
             }
-            function loopDaily(d,t){
+            function loopDaily(d,t,n){
                 var result = [];
                 for (let i = 0; i < 24; i++) {
-                    result[i] = d[1][i][t];
+                    result[i] = d[n][i][t];
                 }
                 return result;
             }

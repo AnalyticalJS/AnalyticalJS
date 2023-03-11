@@ -1,6 +1,6 @@
 <div class="panel height100">
 
-    <h2 class="panelHeader">Crawls</h2>
+    <h2 class="panelHeader">Crawls <span class="record"></span></h2>
                 
     <div class="panelInner">
 

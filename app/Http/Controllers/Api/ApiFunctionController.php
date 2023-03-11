@@ -158,11 +158,12 @@ class ApiFunctionController
     public function realtime($id)
     {
         $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
-        $sessions = GlobalFunc::getCache($id.'Sessions');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        $sessions = collect(GlobalFunc::getCache($id.'Sessions'))->where('updated_at', '>', $lastDay);
         $sessionInfo = GlobalFunc::getCache($id.'sessionInfo');
         $days = GlobalFunc::getCache($id.'dailySessions');
-        /*$botData = GlobalFunc::getCache($id.'botData');
-        $pagesData = GlobalFunc::getCache($id.'dailyPages');
+        $botData = GlobalFunc::getCache($id.'botData');
+        /*$pagesData = GlobalFunc::getCache($id.'dailyPages');
         $referralTypeData = GlobalFunc::getCache($id.'dailyReferralTypes');*/
         $referralData = GlobalFunc::getCache($id.'dailyReferral');
         $minsAgo = collect($sessions)->where('updated_at', '>', $mins);
@@ -175,9 +176,9 @@ class ApiFunctionController
                 GlobalFunc::count_format2($sessionInfo->unique("cityName")->count()),
                 GlobalFunc::count_format2($sessionInfo->unique("browser")->count()),
                 GlobalFunc::count_format2($sessionInfo->unique("device_type")->count()),
-                GlobalFunc::count_format2($sessionInfo->unique("device_title")->count()),
+                GlobalFunc::count_format2($sessionInfo->unique("os_title")->count()),
                 GlobalFunc::count_format2($referralData->sum("count"))
             ];
-        return [$realtime,$days];
+        return [$realtime,$days,$botData];
     }
 }
