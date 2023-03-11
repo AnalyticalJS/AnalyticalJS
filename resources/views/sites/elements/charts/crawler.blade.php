@@ -8,4 +8,14 @@
 
     </div>
 
+    <div class="row">
+
+        <div class="col-md-12 text-right">
+
+            <small class="whiteText">Updated <span id="updatedTime2">0</span>s ago</small>        
+
+        </div>
+
+    </div>
+
 </div>

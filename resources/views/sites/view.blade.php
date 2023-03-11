@@ -281,9 +281,16 @@
     <script src="{{ mix('js/chart.js') }}"></script>
 
     <script>
+            var count = 0;
             realtime = setInterval(function() { 
                 fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
             }, 15000);
+
+            setInterval(function() { 
+                count++;
+                document.getElementById("updatedTime").innerHTML = count;
+                document.getElementById("updatedTime2").innerHTML = count;
+            }, 1000);
             function updateRealtime(udata){
                 udata[1].reverse();
                 document.getElementById("sessions").innerHTML = udata[0][0];
@@ -312,6 +319,9 @@
                     });
                     chart2.update();
                 }
+                count=0;
+                document.getElementById("updatedTime").innerHTML = count;
+                document.getElementById("updatedTime2").innerHTML = count;
             }
             function loopDaily(d,t,n){
                 var result = [];
