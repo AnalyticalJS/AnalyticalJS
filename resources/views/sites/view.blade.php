@@ -311,7 +311,7 @@
                 if(udata[2].length > 0){
                     chart2.data.labels = loopDaily(udata, "hour", 2);
                     chart2.data.datasets.forEach(function(dataset, index) {
-                        dataset.data = loopDaily(udata, "pages", 2);
+                        dataset.data = loopDaily(udata, "bots", 2);
                     });
                     chart2.update();
                 }
