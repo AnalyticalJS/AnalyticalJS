@@ -286,7 +286,6 @@
             }, 15000);
             function updateRealtime(udata){
                 udata[1].reverse();
-                udata[2].reverse();
                 document.getElementById("sessions").innerHTML = udata[0][0];
                 document.getElementById("pages").innerHTML = udata[0][1];
                 document.getElementById("sessionsCount").innerHTML = udata[0][2];
@@ -307,11 +306,9 @@
                         }
                     });
                     chart.update();
-                }
-                if(udata[2].length > 0){
-                    chart2.data.labels = loopDaily(udata, "hour", 2);
+                    chart2.data.labels = loopDaily(udata, "hour", 1);
                     chart2.data.datasets.forEach(function(dataset, index) {
-                        dataset.data = loopDaily(udata, "bots", 2);
+                        dataset.data = loopDaily(udata, "bots", 1);
                     });
                     chart2.update();
                 }

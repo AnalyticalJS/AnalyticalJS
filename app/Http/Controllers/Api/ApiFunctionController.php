@@ -179,6 +179,6 @@ class ApiFunctionController
                 GlobalFunc::count_format2($sessionInfo->unique("os_title")->count()),
                 GlobalFunc::count_format2($referralData->sum("count"))
             ];
-        return [$realtime,$days,$botData];
+        return [$realtime,$days];
     }
 }
