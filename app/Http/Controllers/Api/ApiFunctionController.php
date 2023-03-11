@@ -80,10 +80,7 @@ class ApiFunctionController
                     } else {
                             $newReferral = $theReferral->update(["pages" => $theReferral->first()->pages+1]);
                     }
-                    $sessions = Session::where('updated_at', '>', Carbon::now()->subHours(24)->toDateTimeString())->where("website_id", $website->first()->id);
-                    if($sessions->count() > 0){
-                        GlobalFunc::saveCache($website->first()->id.'Sessions', $sessions->get());
-                    }
+                    $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
                 } else {
                     $newSession = Session::create(["website_id" => $website->first()->id, "ip" => $ip, "pages" => 1]);
                     $id = $newSession->id;
@@ -118,10 +115,7 @@ class ApiFunctionController
                     }
                     $newSessionInfo = Session_information::create($sessionInfo);
                 }
-                $sessions = Session::where('updated_at', '>', Carbon::now()->subHours(24)->toDateTimeString())->where("website_id", $website->first()->id);
-                if($sessions->count() > 0){
-                    GlobalFunc::saveCache($website->first()->id.'Sessions', $sessions->get());
-                }
+                $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
             } else if($website->get()->count() < 1) {
                 $failed = false;
                 $newWebsite = Website::create(["domain" => $referrerDomain]);

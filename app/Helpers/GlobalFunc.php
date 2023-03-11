@@ -79,4 +79,29 @@ class GlobalFunc
         GlobalFunc::saveCache($key, $result);
     }
 
+    public static function dailyData($id, $sessions)
+    {
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        $theSessions = collect($sessions)->where('updated_at', '>', $lastDay);
+        if($theSessions->count() > 0){
+            GlobalFunc::saveCache($id.'Sessions', $theSessions);
+        }
+        $days = array();
+        for ($i = 0; $i < 24; $i++) {
+            $hour = Carbon::now()->subHours($i)->startOfHour()->toDateTimeString();
+            $hourDisplay = Carbon::now()->subHours($i)->startOfHour()->toTimeString();
+            $hourEnd = Carbon::now()->subHours($i)->endOfHour()->toDateTimeString();
+            $sessions = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
+            $pages = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->sum("pages");
+            $theBots = collect(GlobalFunc::getCache($id.'botData'))->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
+            array_push($days, [
+                "hour" => $hourDisplay,
+                "sessions" => $sessions,
+                "pages" => $pages,
+                "bots" => $theBots
+            ]);
+        }
+        $dailySessions = GlobalFunc::saveCache($id.'dailySessions', $days);
+    }
+
 }

@@ -21,23 +21,6 @@ class Command
             $days = array();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
             $theSessions = $website->sessions->where('updated_at', '>', $lastDay);
-            if($theSessions->count() > 0){
-                GlobalFunc::saveCache($website->id.'Sessions', $theSessions);
-            }
-            for ($i = 0; $i < 24; $i++) {
-                $hour = Carbon::now()->subHours($i)->startOfHour()->toDateTimeString();
-                $hourDisplay = Carbon::now()->subHours($i)->startOfHour()->toTimeString();
-                $hourEnd = Carbon::now()->subHours($i)->endOfHour()->toDateTimeString();
-                $sessions = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
-                $pages = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->sum("pages");
-                $theBots = $website->bots()->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
-                array_push($days, [
-                    "hour" => $hourDisplay,
-                    "sessions" => $sessions,
-                    "pages" => $pages,
-                    "bots" => $theBots
-                ]);
-            }
             $botdata = Bot::where('website_id',$website->id)->where('created_at', '>', $lastDay)->get();
             $session_info = $website->session_info->where('created_at', '>', $lastDay);
             $pagesData = collect($website->pages->where('created_at', '>', $lastDay))->unique("url")->take(100)->sortByDesc("count");
@@ -50,7 +33,7 @@ class Command
                     $type->typeCount = $ref->sortByDesc("count")->count();
                 }
             }
-            $dailySessions = GlobalFunc::saveCache($website->id.'dailySessions', $days);
+            $dailySessions = GlobalFunc::dailyData($website->id, $theSessions);
             $botData = GlobalFunc::saveCache($website->id.'botData', $botdata);
             $dailyReferral = GlobalFunc::saveCache($website->id.'dailyReferral', $referralData->values());
             $dailyReferralTypes = GlobalFunc::saveCache($website->id.'dailyReferralTypes', $referralTypesData->values());

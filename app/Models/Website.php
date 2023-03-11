@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -26,18 +27,23 @@ class Website extends Model
     ];
 
     public function sessions() {
-        return $this->hasMany('App\Models\Session','website_id','id');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        return $this->hasMany('App\Models\Session','website_id','id')->where('updated_at', '>', $lastDay);
     }
     public function session_info() {
-        return $this->hasMany('App\Models\Session_information','website_id','id');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        return $this->hasMany('App\Models\Session_information','website_id','id')->where('updated_at', '>', $lastDay);
     }
     public function pages() {
-        return $this->hasMany('App\Models\Page','website_id','id');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        return $this->hasMany('App\Models\Page','website_id','id')->where('updated_at', '>', $lastDay);
     }
     public function referrals() {
-        return $this->hasMany('App\Models\Referral','website_id','id');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        return $this->hasMany('App\Models\Referral','website_id','id')->where('updated_at', '>', $lastDay);
     }
     public function bots() {
-        return $this->hasMany('App\Models\Bot','website_id','id');
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        return $this->hasMany('App\Models\Bot','website_id','id')->where('updated_at', '>', $lastDay);
     }
 }
