@@ -282,8 +282,21 @@
 
     <script>
             var count = 0;
+            var active = true;
+            document.addEventListener( 'visibilitychange' , function() {
+                if (document.hidden) {
+                    console.log('bye');
+                    active = false;
+                } else {
+                    console.log('well back');
+                    active = true;
+                }
+            }, false );
+
             realtime = setInterval(function() { 
-                fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
+                if(active == true){
+                    fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
+                }
             }, 15000);
 
             setInterval(function() { 
