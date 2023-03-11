@@ -284,13 +284,7 @@
             var count = 0;
             var active = true;
             document.addEventListener( 'visibilitychange' , function() {
-                if (document.hidden) {
-                    console.log('bye');
-                    active = false;
-                } else {
-                    console.log('well back');
-                    active = true;
-                }
+                if (document.hidden) { active = false; } else { active = true; }
             }, false );
 
             realtime = setInterval(function() { 
