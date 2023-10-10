@@ -6,7 +6,7 @@
 
         <div class="largeNumber gradientText" id="sessions">{{GlobalFunc::count_format2($realtime->count())}}</div>
 
-        <small>Sessions active in the last 30 minutes</small>
+        <small>Sessions active in the last 10 minutes</small>
 
     </div>
 
@@ -14,7 +14,7 @@
 
         <div class="largeNumber gradientText" id="pages">{{GlobalFunc::count_format2($realtime->sum("pages"))}}</div>
 
-        <small>Pages viewed in the last 30 minutes</small>
+        <small>Pages viewed in the last 10 minutes</small>
 
     </div>
 

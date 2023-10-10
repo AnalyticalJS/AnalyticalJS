@@ -18,5 +18,6 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
+Artisan::command('reloadCache', function () { App\Console\Command::reloadCache($this); })->purpose('Reload database into cache.');
 Artisan::command('countHourly', function () { App\Console\Command::countHourly($this); })->purpose('Counts the hourly website stats.');
 Artisan::command('countDupes', function () { App\Console\Command::countDupes($this); })->purpose('Counts the duplicates and saves it.');

@@ -259,7 +259,7 @@
             var chart;
             var chart2;
             var data = @json($daily);
-            var sessionData = @json($sessionInfo);
+            var sessionData = @json(collect($sessionInfo));
             var referralTypeData = sortBy(getUniqueListBy(@json($referralTypeData),'type'), "typeCount").slice(0,10);
             var botData = sortBy(getUniqueListBy(@json($botData),'bot'), "count").slice(0,10);
             var browserData = sortBy(getUniqueListBy(sessionData,'browser'), "countBrowser").slice(0,10);
@@ -291,7 +291,7 @@
                 if(active == true){
                     fetch("/api/realtime/{{ $website->id }}").then((response) => response.json()).then((data) => updateRealtime(data));
                 }
-            }, 15000);
+            }, 5000);
 
             setInterval(function() { 
                 count++;
@@ -310,21 +310,26 @@
                 document.getElementById("devicesCount").innerHTML = udata[0][7];
                 document.getElementById("osCount").innerHTML = udata[0][8];
                 document.getElementById("referralsCount").innerHTML = udata[0][9];
+                var rdata = udata;
                 if(udata[1].length > 0){
-                    chart.data.labels = loopDaily(udata, "hour", 1);
-                    chart.data.datasets.forEach(function(dataset, index) {
-                        if(index == 0){
-                            dataset.data = loopDaily(udata, "pages", 1);
-                        } else {
-                            dataset.data = loopDaily(udata, "sessions", 1);
-                        }
-                    });
-                    chart.update();
-                    chart2.data.labels = loopDaily(udata, "hour", 1);
-                    chart2.data.datasets.forEach(function(dataset, index) {
-                        dataset.data = loopDaily(udata, "bots", 1);
-                    });
-                    chart2.update();
+                    if(chart != undefined){
+                        chart.data.labels = loopDaily(udata, "hour", 1);
+                        chart.data.datasets.forEach(function(dataset, index) {
+                            if(index == 0){
+                                dataset.data = loopDaily(udata, "pages", 1);
+                            } else {
+                                dataset.data = loopDaily(udata, "sessions", 1);
+                            }
+                        });
+                        chart.update();
+                    }
+                    if(chart2 != undefined){
+                        chart2.data.labels = loopDaily(rdata, "hour", 1);
+                        chart2.data.datasets.forEach(function(dataset, index) {
+                            dataset.data = loopDaily(rdata, "bots", 1);
+                        });
+                        chart2.update();
+                    }
                 }
                 count=0;
                 document.getElementById("updatedTime").innerHTML = count;
@@ -340,3 +345,4 @@
     </script>
 </html>
 
+            {{dd($sessionInfo)}}

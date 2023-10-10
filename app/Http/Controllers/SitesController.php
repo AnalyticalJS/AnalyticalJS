@@ -25,7 +25,8 @@ class SitesController extends Controller
 
     public function site($domain = "analyticaljs.com")
     {
-        $website = Website::where("domain",$domain)->select('domain','id');
+        //$website = Website::where("domain",$domain)->select('domain','id');
+        $website = collect(GlobalFunc::getCache("Websites"))->where("domain",$domain);
         if($website->count() > 0){
             $theWebsite = $website->first();
             $days = GlobalFunc::getCache($theWebsite->id.'dailySessions');
@@ -33,12 +34,14 @@ class SitesController extends Controller
             $pagesData = GlobalFunc::getCache($theWebsite->id.'dailyPages');
             $referralData = GlobalFunc::getCache($theWebsite->id.'dailyReferral');
             $referralTypeData = GlobalFunc::getCache($theWebsite->id.'dailyReferralTypes');
-            $sessionInfo = GlobalFunc::getCache($theWebsite->id.'sessionInfo');
-            $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
+            $sessionInfo = GlobalFunc::getCache($theWebsite->id.'session_info');
+            $mins = Carbon::now()->subMinutes(10)->toDateTimeString();
             $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
             $sessions = collect(GlobalFunc::getCache($theWebsite->id.'Sessions'))->where('updated_at', '>', $lastDay);
             $realtime = collect($sessions)->where('updated_at', '>', $mins);
-            
+            //dd(GlobalFunc::getCache($theWebsite->id.'dailySessions'));
+            //var_dump(GlobalFunc::getCache($theWebsite->id.'Sessions'));
+
             if($sessionInfo == null){
                 $sessionInfo = collect([]);
             }

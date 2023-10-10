@@ -10,27 +10,16 @@ class Website extends Model
 {
 
     protected $fillable = [
-        'domain',
-        'dailySessions',
-        'dailyReferral',
-        'dailyReferralTypes',
-        'dailyPages'
+        'domain'
     ];
 
     use SoftDeletes;
-
-    protected $casts = [
-        'dailySessions' => 'array',
-        'dailyReferral' => 'array',
-        'dailyReferralTypes' => 'array',
-        'dailyPages' => 'array'
-    ];
 
     public function sessions() {
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
         return $this->hasMany('App\Models\Session','website_id','id')->where('updated_at', '>', $lastDay);
     }
-    public function session_info() {
+    public function sessioninfo() {
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
         return $this->hasMany('App\Models\Session_information','website_id','id')->where('updated_at', '>', $lastDay);
     }

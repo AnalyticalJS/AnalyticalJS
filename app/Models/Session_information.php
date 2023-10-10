@@ -38,4 +38,8 @@ class Session_information extends Model
     {
         return $this->belongsTo('App\Models\Session','id','session_id');
     }
+    public function website()
+    {
+        return $this->belongsTo('App\Models\Website','id','website_id');
+    }
 }

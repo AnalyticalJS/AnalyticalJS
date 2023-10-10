@@ -15,6 +15,7 @@ use App\Models\Session_information;
 use foroco\BrowserDetection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
 use Stevebauman\Location\Facades\Location;
 
 
@@ -27,46 +28,68 @@ class ApiFunctionController
 
     public function initDetails()
     {
-        $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        if($_SERVER['HTTP_REFERER']){
+            $referrerDomain = parse_url($_SERVER['HTTP_REFERER'], PHP_URL_HOST);
+        } else {
+            $referrerDomain = "";
+        }
         $useragent = Request::server('HTTP_USER_AGENT');
-        $website = Website::where("domain",$referrerDomain);
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        if(!GlobalFunc::hasCache("Websites")){ GlobalFunc::initCache(); }
+        $website = collect(GlobalFunc::getCache("Websites"))->where("domain",$referrerDomain)->first();
         if(!Crawler::isCrawler($useragent)) {
             $data = Request::all();
             $ip = Request::ip();
             $id = 0;
+            $failed = false;
             $page = $data['page'];
             $referral = $data['referrer'];
             $Browser = new BrowserDetection;
             $browserInfo = $Browser->getAll($useragent);
-
             if((str_contains($ip, "192.168") || str_contains($ip, "127.0")) && env("APP_ENV") == "Production") {
                 $failed = true;
-                return [
-                    "id" => "error",
-                    "userIP" => "error", 
-                    "referrer" => "error",
-                    "referrerDomain" => "error",
-                    "failed" => true
-                    ];
-            } else if($website->get()->count() > 0){
-                $failed = false;
-                $session = Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("ip", $ip)->where("website_id", $website->first()->id);
-                if($session->get()->count() > 0){
-                    $session->first()->update(["pages" => $session->first()->pages+1]);
-                    $id = $session->first()->id;
-                    $thePage = Page::where("url", $page)->where("session_id", $id);
-                    $theReferral = Referral::where("url", $referral)->where("session_id", $id);
+            } else if(!$website) {
+                $newWebsite = Website::create(["domain" => $referrerDomain]);
+                $theSession = Session::create(["website_id" => $newWebsite->id, "pages" => 1]);
+                GlobalFunc::addRowCache("Websites",$newWebsite);
+                GlobalFunc::addRowCache($newWebsite->id."Sessions",$theSession);
+                $id = $newSession->id;    
+                $newSession = true;            
+            } else if($website->count() > 0){
+                $sessions = GlobalFunc::getCache($website->id."Sessions");
+                $session = collect($sessions)->where("ip",$ip)->where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString());
+                if($session->count() > 0){
+                    $session = $session->first();
+                    $uSession = $session;
+                    $uSession["pages"] =  $uSession["pages"]+1;
+                    $theSession = Session::where("id",$session["id"])->update(["pages" => $session["pages"]+1]);
+                    GlobalFunc::updateRowCache($website->id."Sessions",$uSession,$session["id"]);
+                } else {
+                    $theSession = Session::create(["website_id" => $website->id, "ip" => $ip, "pages" => 1]);
+                    GlobalFunc::addRowCache($website->id."Sessions",$theSession);
+                    $newSession = true;
+                }
+            } else {
+                $failed = true;
+            } 
+
+            if($failed == false){
+                    $thePage = collect(GlobalFunc::getCache($website->id.'dailyPages'))->where("url", $page)->where("session_id", $id);
+                    $theReferral = collect(GlobalFunc::getCache($website->id.'dailyReferral'))->where("url", $page)->where("session_id", $id);
 
                     if($thePage->count() < 1){
                         $newPage = Page::create([
-                            "website_id" => $website->first()->id, 
+                            "website_id" => $website->id, 
                             "session_id" => $id, 
                             "pages" => 1, 
                             "url" => $page,
                             ]);
+                        GlobalFunc::addRowCache($website->id."dailyPages",$newPage);
                     } else {
-                        $newPage = $thePage->update(["pages" => $thePage->first()->pages+1]);
+                        $uPage = $thePage->first();
+                        $uPage["pages"] =  $uPage["pages"]+1;
+                        $newPage = Page::where("id", $uPage["id"])->update(["pages" => $thePage->first()->pages+1]);
+                        GlobalFunc::updateRowCache($website->id."dailyPages",$uPage,$uPage["id"]);
                     }
                     if($theReferral->count() < 1){
                         if(!str_contains($referral, env("APP_URL"))){
@@ -76,18 +99,15 @@ class ApiFunctionController
                                 "pages" => 1, 
                                 "url" => $referral,
                                 ]);
+                            GlobalFunc::addRowCache($website->id."dailyReferral",$newReferral);
                         }
                     } else {
-                            $newReferral = $theReferral->update(["pages" => $theReferral->first()->pages+1]);
+                        $uReferral = $theReferral->first();
+                        $uReferral["pages"] =  $uReferral["pages"]+1;
+                        $newReferral =  Referral::where("session_id", $uReferral["id"])->update(["pages" => $thePage->first()->pages+1]);
+                        GlobalFunc::updateRowCache($website->id."dailyReferral",$uReferral,$uReferral["id"]);
                     }
-                    $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
-                } else {
-                    $newSession = Session::create(["website_id" => $website->first()->id, "ip" => $ip, "pages" => 1]);
-                    $id = $newSession->id;
-                    $newPage = Page::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $page]);
-                    if(!str_contains($referral, env("APP_URL"))){
-                        $newReferral = Referral::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $referral]);
-                    }
+
                     $currentUserInfo = Location::get($ip);
                     $sessionInfo = array();
                     $sessionInfo['website_id'] = $website->first()->id;
@@ -100,9 +120,6 @@ class ApiFunctionController
                     $sessionInfo['os_version'] = $browserInfo['os_version'];
                     $sessionInfo['os_title'] = $browserInfo['os_title'];
                     $sessionInfo['device_type'] = $browserInfo['device_type'];
-                    $sessionInfo["countBrowser"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("browser", $browserInfo['browser_name'])->count();
-                    $sessionInfo["countOs"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("os_title", $browserInfo['os_title'])->count();
-                    $sessionInfo["countDevice"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("device_type", $browserInfo['device_type'])->count();
                     if(isset($currentUserInfo->countryName)){
                         $sessionInfo['countryName'] = $currentUserInfo->countryName;
                         $sessionInfo['countryCode'] = $currentUserInfo->countryCode;
@@ -110,19 +127,33 @@ class ApiFunctionController
                         $sessionInfo['latitude'] = $currentUserInfo->latitude; 
                         $sessionInfo['longitude'] = $currentUserInfo->longitude; 
                         $sessionInfo['timezone'] = $currentUserInfo->timezone; 
-                        $sessionInfo["countCountries"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("countryName", $currentUserInfo->countryName)->count();
-                        $sessionInfo["countCity"] = Session_information::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("cityName", $currentUserInfo->cityName)->count();
                     }
                     $newSessionInfo = Session_information::create($sessionInfo);
-                }
-                $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
-            } else if($website->get()->count() < 1) {
-                $failed = false;
-                $newWebsite = Website::create(["domain" => $referrerDomain]);
-                $newSession = Session::create(["website_id" => $newWebsite->id, "pages" => 1]);
-                $id = $newSession->id;
-            } else {
-                $failed = true;
+                    GlobalFunc::addRowCache($website->id."session_info",$sessionInfo);
+            }
+            
+        } else {
+            $bot = Crawler::getMatches();
+            $theBot = Bot::create([
+                "website_id" => $website->first()->id,
+                "bot" => $bot
+            ]);
+            GlobalFunc::addRowCache($website->id."Bots",$theBot);
+            $failed = true;
+        }
+        
+        if($failed == true){
+            return [
+                "id" => "error",
+                "userIP" => "error", 
+                "referrer" => "error",
+                "referrerDomain" => "error",
+                "failed" => true
+            ];
+        } else {
+            if($sessions != null){
+                $theSessions = collect($sessions)->where('updated_at', '>', $lastDay);
+                $dailySessions = GlobalFunc::dailyData($website->id, $theSessions);
             }
             return [
                 "id" => $id,
@@ -130,49 +161,41 @@ class ApiFunctionController
                 "referrer" => $referral,
                 "referrerDomain" => $referrerDomain,
                 "failed" => $failed
-                ];
-                
-        } else {
-            $bot = Crawler::getMatches();
-            Bot::create([
-                "website_id" => $website->first()->id,
-                "bot" => $bot,
-                "count" => Bot::where('created_at', '>', $lastDay)->where("website_id",$website->first()->id)->where("bot",$bot)->count()
-            ]);
-            return [
-                "id" => "error",
-                "userIP" => "error", 
-                "referrer" => "error",
-                "referrerDomain" => "error",
-                "failed" => true
-                ];
+                ];               
         }
     }
 
     public function realtime($id)
     {
-        $mins = Carbon::now()->subMinutes(30)->toDateTimeString();
+        $mins = Carbon::now()->subMinutes(10)->toDateTimeString();
         $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
         $sessions = collect(GlobalFunc::getCache($id.'Sessions'))->where('updated_at', '>', $lastDay);
-        $sessionInfo = GlobalFunc::getCache($id.'sessionInfo');
+        $sessionInfo = collect(GlobalFunc::getCache($id.'session_info'));
         $days = GlobalFunc::getCache($id.'dailySessions');
         $botData = GlobalFunc::getCache($id.'botData');
-        /*$pagesData = GlobalFunc::getCache($id.'dailyPages');
-        $referralTypeData = GlobalFunc::getCache($id.'dailyReferralTypes');*/
         $referralData = GlobalFunc::getCache($id.'dailyReferral');
         $minsAgo = collect($sessions)->where('updated_at', '>', $mins);
-        $realtime = [
+        if($sessionInfo){
+            $realtime = [
+                    GlobalFunc::count_format2($minsAgo->count()),
+                    GlobalFunc::count_format2($minsAgo->sum("pages")),
+                    GlobalFunc::count_format2($sessions->count()),
+                    GlobalFunc::count_format2($sessions->sum("pages")),
+                    GlobalFunc::count_format2($sessionInfo->unique("countryName")->count()),
+                    GlobalFunc::count_format2($sessionInfo->unique("cityName")->count()),
+                    GlobalFunc::count_format2($sessionInfo->unique("browser")->count()),
+                    GlobalFunc::count_format2($sessionInfo->unique("device_type")->count()),
+                    GlobalFunc::count_format2($sessionInfo->unique("os_title")->count()),
+                    GlobalFunc::count_format2(collect($referralData)->sum("count"))
+                ];
+        } else {
+            $realtime = [
                 GlobalFunc::count_format2($minsAgo->count()),
                 GlobalFunc::count_format2($minsAgo->sum("pages")),
                 GlobalFunc::count_format2($sessions->count()),
-                GlobalFunc::count_format2($sessions->sum("pages")),
-                GlobalFunc::count_format2($sessionInfo->unique("countryName")->count()),
-                GlobalFunc::count_format2($sessionInfo->unique("cityName")->count()),
-                GlobalFunc::count_format2($sessionInfo->unique("browser")->count()),
-                GlobalFunc::count_format2($sessionInfo->unique("device_type")->count()),
-                GlobalFunc::count_format2($sessionInfo->unique("os_title")->count()),
-                GlobalFunc::count_format2($referralData->sum("count"))
+                GlobalFunc::count_format2($sessions->sum("pages"))
             ];
+        }
         return [$realtime,$days];
     }
 }
