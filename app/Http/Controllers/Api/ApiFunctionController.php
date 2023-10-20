@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use Request;
 use Crawler;
+use Session;
 use GlobalFunc;
 use Carbon\Carbon;
 use App\Models\Page;
 use App\Models\Bot;
 use App\Models\Website;
-use App\Models\Session;
 use App\Models\Referral;
 use App\Models\Session_information;
 use foroco\BrowserDetection;
@@ -51,8 +51,8 @@ class ApiFunctionController
                     ];
             } else if($website->get()->count() > 0){
                 $failed = false;
-                if(Request::session()->has('session')){
-                    $session = Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("id", Request::session()->get('session'))->where("website_id", $website->first()->id);
+                if(Session::has('session')){
+                    $session = \App\Models\Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("id", Request::session()->get('session'))->where("website_id", $website->first()->id);
                     $session->first()->update(["pages" => $session->first()->pages+1]);
                     $id = $session->first()->id;
                     $thePage = Page::where("url", $page)->where("session_id", $id);
@@ -82,9 +82,9 @@ class ApiFunctionController
                     }
                     $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
                 } else {
-                    $newSession = Session::create(["website_id" => $website->first()->id, "pages" => 1]);
+                    $newSession = \App\Models\Session::create(["website_id" => $website->first()->id, "pages" => 1]);
                     $id = $newSession->id;
-                    Request::session()->put('session', $id);
+                    Session::put('session', $id);
                     $newPage = Page::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $page]);
                     if(!str_contains($referral, env("APP_URL"))){
                         $newReferral = Referral::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $referral]);
