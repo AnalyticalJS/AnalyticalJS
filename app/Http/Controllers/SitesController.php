@@ -26,6 +26,7 @@ class SitesController extends Controller
     public function site($domain = "analyticaljs.com")
     {
         $website = Website::where("domain",$domain)->select('domain','id');
+        //$website = collect(GlobalFunc::getCache("Websites"))->where("domain",$domain);
         if($website->count() > 0){
             $theWebsite = $website->first();
             $days = GlobalFunc::getCache($theWebsite->id.'dailySessions');
