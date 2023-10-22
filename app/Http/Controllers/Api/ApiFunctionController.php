@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use Log;
 use Request;
 use Crawler;
-use Session;
 use GlobalFunc;
 use Carbon\Carbon;
 use App\Models\Page;
 use App\Models\Bot;
 use App\Models\Website;
+use App\Models\Session;
 use App\Models\Referral;
 use App\Models\Session_information;
 use foroco\BrowserDetection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
 use Stevebauman\Location\Facades\Location;
+use Illuminate\Support\Facades\Hash;
 
 
 class ApiFunctionController
@@ -51,13 +53,19 @@ class ApiFunctionController
                     ];
             } else if($website->get()->count() > 0){
                 $failed = false;
-                if(Session::has('session')){
-                    $session = \App\Models\Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("id", Request::session()->get('session'))->where("website_id", $website->first()->id);
-                    $session->first()->update(["pages" => $session->first()->pages+1]);
+                $session = Session::where('updated_at', '>', Carbon::now()->subMinutes(10)->toDateTimeString())->where("website_id", $website->first()->id);
+                foreach($session->get() as $s){
+                    //Log::debug($s->id.' - '.Hash::check($ip, $s->uuid));
+                    if(Hash::check($ip, $s->uuid) == 1){
+                        $match = $s;
+                    }
+                }
+                if(isset($match)){
+                    Session::where("id",$match->id)->update(["pages" => $session->first()->pages+1]);
                     $id = $session->first()->id;
                     $thePage = Page::where("url", $page)->where("session_id", $id);
                     $theReferral = Referral::where("url", $referral)->where("session_id", $id);
-
+                    
                     if($thePage->count() < 1){
                         $newPage = Page::create([
                             "website_id" => $website->first()->id, 
@@ -82,9 +90,9 @@ class ApiFunctionController
                     }
                     $cache = GlobalFunc::dailyData($website->first()->id, $website->first()->sessions);
                 } else {
-                    $newSession = \App\Models\Session::create(["website_id" => $website->first()->id, "pages" => 1]);
+                    $ip = Hash::make($ip);
+                    $newSession = Session::create(["website_id" => $website->first()->id, "uuid" => $ip, "pages" => 1]);
                     $id = $newSession->id;
-                    Session::put('session', $id);
                     $newPage = Page::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $page]);
                     if(!str_contains($referral, env("APP_URL"))){
                         $newReferral = Referral::create(["website_id" => $website->first()->id, "session_id" => $id, "pages" => 1, "url" => $referral]);

@@ -104,4 +104,17 @@ class GlobalFunc
         $dailySessions = GlobalFunc::saveCache($id.'dailySessions', $days);
     }
 
+    public function setSessionCookie(Request $request){
+        $minutes = 60;
+        $response = new Response('Set Cookie');
+        $response->withCookie(cookie('name', 'MyValue', $minutes));
+        return $response;
+     }
+
+     public function getSessionCookie(Request $request){
+        $value = $request->cookie('session');
+        if($value == "session"){
+            return true;
+        }
+     }
 }

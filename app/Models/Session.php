@@ -12,6 +12,7 @@ class Session extends Model
     protected $fillable = [
         'pages',
         'website_id',
+        'uuid',
         'session_ended'
     ];
 
