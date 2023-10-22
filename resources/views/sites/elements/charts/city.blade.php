@@ -6,9 +6,9 @@
 
         <div class="row feedData">
 
-            @foreach($sessionInfo->unique("cityName")->sortByDesc("countCity")->slice(0, 100) as $city)
+            @foreach(collect($sessionInfo)->unique("cityName")->sortByDesc("countCity")->slice(0, 100) as $city)
 
-                @if($city->countCity > 0)
+                @if(isset($country['countCity']) && $city['countCity'] > 0)
 
                     <div class="row @if($loop->iteration  % 2 == 0) even @else odd @endif">
 

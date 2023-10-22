@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('countHourly')->everyTenMinutes();
+        $schedule->command('countHourly')->everyFifteenSeconds();
         $schedule->command('countDupes')->hourly();
     }
 

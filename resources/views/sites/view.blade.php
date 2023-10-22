@@ -37,6 +37,7 @@
                     Site analytics for domain: <span class="underlined blueText">{{ $website->domain }}</span>
                 </h1>
 
+
                 <div class="spacer20"></div>
 
                 <div class="row">

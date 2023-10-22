@@ -16,7 +16,7 @@
 
                 <div class="col-6 text-right">
 
-                    <strong>Total @if($pagesData) {{$pagesData->sum("count")}} @else 0 @endif</strong>
+                    <strong>Total @if($pagesData) {{collect($pagesData)->sum("count")}} @else 0 @endif</strong>
 
                 </div>
 

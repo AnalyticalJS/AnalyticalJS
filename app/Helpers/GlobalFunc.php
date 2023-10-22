@@ -2,7 +2,10 @@
 namespace App\Helpers;
 
 use Carbon\Carbon;
+use App\Models\Website;
+use App\Models\Session_information;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
@@ -48,12 +51,41 @@ class GlobalFunc
         return false;
     }
 
+    public static function initCache()
+    {
+        $websites = Website::get();
+        $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+        GlobalFunc::saveCache('Websites', $websites);
+        foreach ($websites as $website){
+            $lastDay = Carbon::now()->subHours(24)->startOfHour()->toDateTimeString();
+            $theSessions = collect($website->sessions)->where('website_id', $website->id)->where('updated_at', '>', $lastDay)->values();
+            $theSessionsInfo = Session_information::where('website_id', $website->id)->where('updated_at', '>', $lastDay)->get()->values();
+            $thePages = collect($website->pages)->where('website_id', $website->id)->where('updated_at', '>', $lastDay)->values();
+            $theReferrals = collect($website->referrals)->where('website_id', $website->id)->where('updated_at', '>', $lastDay)->values();
+            $theBots = collect($website->bots)->where('website_id', $website->id)->where('updated_at', '>', $lastDay)->values();
+            GlobalFunc::saveCache($website->id.'Sessions', $theSessions);
+            GlobalFunc::saveCache($website->id.'dailyPages', $thePages);
+            GlobalFunc::saveCache($website->id.'dailyReferral', $theReferrals);
+            GlobalFunc::saveCache($website->id.'Bots', $theBots);
+            GlobalFunc::saveCache($website->id.'session_info', $theSessionsInfo);
+        }
+    }
+
     public static function saveCache($key, $value)
     {
         if (Cache::has($key)) {
             return Cache::put($key, $value);
         } else {
             return Cache::forever($key, $value);
+        }
+    }
+
+    public static function hasCache($key)
+    {
+        if (Cache::has($key)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -75,8 +107,19 @@ class GlobalFunc
         } else {
             $results = [];
         }
-        $result = array_merge($results, [$value]);
+        if(!is_array($results)){
+            $result = [$value];
+        } else {
+            $result = array_merge($results, [$value]);
+        }
         GlobalFunc::saveCache($key, $result);
+    }
+
+    public static function updateRowCache($key, $value, $id){
+        $items = GlobalFunc::getCache($key);
+        $i = array_search($id, array_column(json_decode(json_encode($items),TRUE), 'id'));
+        $items[$i] = $value;
+        GlobalFunc::saveCache($key, $items);
     }
 
     public static function dailyData($id, $sessions)
@@ -93,7 +136,7 @@ class GlobalFunc
             $hourEnd = Carbon::now()->subHours($i)->endOfHour()->toDateTimeString();
             $sessions = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
             $pages = $theSessions->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->sum("pages");
-            $theBots = collect(GlobalFunc::getCache($id.'botData'))->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
+            $theBots = collect(GlobalFunc::getCache($id.'Bots'))->where('created_at', '>=', $hour)->where('created_at', '<', $hourEnd)->count();
             array_push($days, [
                 "hour" => $hourDisplay,
                 "sessions" => $sessions,
@@ -104,17 +147,4 @@ class GlobalFunc
         $dailySessions = GlobalFunc::saveCache($id.'dailySessions', $days);
     }
 
-    public function setSessionCookie(Request $request){
-        $minutes = 60;
-        $response = new Response('Set Cookie');
-        $response->withCookie(cookie('name', 'MyValue', $minutes));
-        return $response;
-     }
-
-     public function getSessionCookie(Request $request){
-        $value = $request->cookie('session');
-        if($value == "session"){
-            return true;
-        }
-     }
 }
