@@ -267,7 +267,9 @@
             var deviceData = sortBy(getUniqueListBy(sessionData,'device_type'), "countDevice").slice(0,10);
 
             function getUniqueListBy(arr, key) {
+                if(arr){
                 return [...new Map(arr.map(item => [item[key], item])).values()]
+                }
             }
             function sortBy(array, by){
                 var byDate = array.slice(0);
